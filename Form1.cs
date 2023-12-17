@@ -100,6 +100,17 @@ namespace AutoUploadTool
             btnChangeSetting.Enabled = true;
             btnApply.Enabled = false;
             btnCancelSetting.Enabled = false;
+
+            if(toolSetting.monitorFolderPath == "" || toolSetting.targetFileName == "" || toolSetting.destinateFolderPath == "")
+            {
+                btnStart.Enabled = false;
+                btnStart.BackColor = Color.Gray;
+            }
+            else
+            {
+                btnStart.Enabled = true;
+                btnStart.BackColor = Color.Green;
+            }
             
         }
         
