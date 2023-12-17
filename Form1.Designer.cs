@@ -39,6 +39,9 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.btnChangeSetting = new System.Windows.Forms.Button();
+            this.btnApply = new System.Windows.Forms.Button();
+            this.btnCancelSetting = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -56,6 +59,7 @@
             this.txtBoxMonitorFolder.Name = "txtBoxMonitorFolder";
             this.txtBoxMonitorFolder.Size = new System.Drawing.Size(433, 20);
             this.txtBoxMonitorFolder.TabIndex = 1;
+            this.txtBoxMonitorFolder.TextChanged += new System.EventHandler(this.txtBoxMonitorFolder_TextChanged);
             // 
             // btnMonitorFolder
             // 
@@ -72,9 +76,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(25, 95);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 13);
+            this.label2.Size = new System.Drawing.Size(174, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Target File Name";
+            this.label2.Text = "Target File Name (e.g.  example.txt)";
             // 
             // txtTargetFileName
             // 
@@ -115,7 +119,9 @@
             // 
             this.btnStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnStart.Location = new System.Drawing.Point(25, 243);
+            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStart.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnStart.Location = new System.Drawing.Point(28, 344);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 8;
@@ -126,7 +132,9 @@
             // btnStop
             // 
             this.btnStop.BackColor = System.Drawing.Color.Red;
-            this.btnStop.Location = new System.Drawing.Point(154, 242);
+            this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStop.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.btnStop.Location = new System.Drawing.Point(155, 344);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 9;
@@ -136,18 +144,52 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(349, 242);
+            this.btnClose.Location = new System.Drawing.Point(348, 344);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // btnChangeSetting
+            // 
+            this.btnChangeSetting.Location = new System.Drawing.Point(25, 222);
+            this.btnChangeSetting.Name = "btnChangeSetting";
+            this.btnChangeSetting.Size = new System.Drawing.Size(95, 23);
+            this.btnChangeSetting.TabIndex = 11;
+            this.btnChangeSetting.Text = "Change Setting";
+            this.btnChangeSetting.UseVisualStyleBackColor = true;
+            this.btnChangeSetting.Click += new System.EventHandler(this.btnChangeSetting_Click);
+            // 
+            // btnApply
+            // 
+            this.btnApply.Location = new System.Drawing.Point(169, 221);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(75, 23);
+            this.btnApply.TabIndex = 12;
+            this.btnApply.Text = "Apply";
+            this.btnApply.UseVisualStyleBackColor = true;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
+            // 
+            // btnCancelSetting
+            // 
+            this.btnCancelSetting.Location = new System.Drawing.Point(298, 221);
+            this.btnCancelSetting.Name = "btnCancelSetting";
+            this.btnCancelSetting.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelSetting.TabIndex = 13;
+            this.btnCancelSetting.Text = "Cancel";
+            this.btnCancelSetting.UseVisualStyleBackColor = true;
+            this.btnCancelSetting.Click += new System.EventHandler(this.btnCancelSetting_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(603, 406);
+            this.Controls.Add(this.btnCancelSetting);
+            this.Controls.Add(this.btnApply);
+            this.Controls.Add(this.btnChangeSetting);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
@@ -180,6 +222,9 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.Button btnChangeSetting;
+        private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.Button btnCancelSetting;
     }
 }
 
