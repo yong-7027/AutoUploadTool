@@ -30,9 +30,11 @@ namespace AutoUploadTool
         string binDataFilePath = "settings.bin";
 
         private FileSystemWatcher watcher;
+        Boolean initializaion;
 
 
-        
+
+
         public Form1()
         { 
             InitializeComponent();
@@ -105,11 +107,13 @@ namespace AutoUploadTool
             {
                 btnStart.Enabled = false;
                 btnStart.BackColor = Color.Gray;
+                initializaion = false;
             }
             else
             {
                 btnStart.Enabled = true;
                 btnStart.BackColor = Color.Green;
+                initializaion = true;
             }
             
         }
@@ -458,7 +462,16 @@ namespace AutoUploadTool
             txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
             txtTargetFileName.Text = toolSetting.targetFileName;
             txtDestinationFolder.Text = toolSetting.destinateFolderPath;
-
+            if(initializaion == false)
+            {
+                btnStart.Enabled = false;
+                btnStart.BackColor = Color.Gray;
+            }
+            else
+            {
+                btnStart.Enabled = true;
+                btnStart.BackColor = Color.Green;
+            }
 
         }
     }
