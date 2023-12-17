@@ -210,14 +210,21 @@ namespace AutoUploadTool
             }
             btnChangeSetting.Enabled = true;
         }
-
+        /*
         private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
         {
+            ToolSetting toolSetting = new ToolSetting();
+            string binDataFilePath = "settings.bin";
+            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+
             if (e.ChangeType == WatcherChangeTypes.Created)
             {
-                // 在这里执行您想要触发的函数
-                Console.WriteLine($"New folder created: {e.FullPath}");
+                
 
+
+                // 在这里执行您想要触发的函数
+                //Console.WriteLine($"New folder created: {e.FullPath}");
+                MessageBox.Show($"New folder created: {e.FullPath}");
 
                 //get folder name
                 string folderName = Path.GetFileName(e.FullPath);
@@ -232,7 +239,7 @@ namespace AutoUploadTool
                 foreach (string file in files)
                 {
                     //Console.WriteLine(file);
-                    if (file.Contains("insp_pad.txt"))
+                    if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
                     {
                         string fileName = Path.GetFileName(file);
                         // cut the "." and words after the "." of fileName
@@ -241,13 +248,99 @@ namespace AutoUploadTool
 
                         //Console.WriteLine(file);
                         string newFileName = fileName + "_" + folderName + ".txt";
-                        string newFilePath = @"C:\Users\tcy70\OneDrive - student.tarc.edu.my\Destination\" + newFileName;
-                        File.Copy(file, newFilePath);
+                        string newFilePath = toolSetting.destinateFolderPath + @"\"  + newFileName;
+                        File.Copy(file, newFilePath,true);
                         Console.WriteLine($"New file created: {newFilePath}");
                     }
                 }
             }
         }
+        */
+        /*
+        private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
+        {
+            ToolSetting toolSetting = new ToolSetting();
+            string binDataFilePath = "settings.bin";
+            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+
+            if (e.ChangeType == WatcherChangeTypes.Created)
+            {
+                // 在这里执行您想要触发的函数
+                // Console.WriteLine($"New folder created: {e.FullPath}");
+                MessageBox.Show($"New folder created: {e.FullPath}");
+
+                // get folder name
+                string folderName = Path.GetFileName(e.FullPath);
+
+                // loop until the folder is created and contains the target file
+                while (!Directory.Exists(e.FullPath) || !Directory.GetFiles(e.FullPath).Any(file =>
+                    string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    await Task.Delay(1000); // 每秒检查一次，可以根据实际情况调整
+                }
+
+                // get folder's all files
+                string[] files = Directory.GetFiles(e.FullPath);
+
+                // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
+                foreach (string file in files)
+                {
+                    if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        string fileName = Path.GetFileName(file);
+                        // cut the "." and words after the "." of fileName
+                        fileName = fileName.Substring(0, fileName.IndexOf("."));
+
+                        string newFileName = fileName + "_" + folderName + ".txt";
+                        string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                        File.Copy(file, newFilePath, true);
+                        Console.WriteLine($"New file created: {newFilePath}");
+                    }
+                }
+            }
+        }
+        */
+        private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
+        {
+            ToolSetting toolSetting = new ToolSetting();
+            string binDataFilePath = "settings.bin";
+            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+
+            if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Renamed)
+            {
+                // 在这里执行您想要触发的函数
+                // Console.WriteLine($"New folder created or renamed: {e.FullPath}");
+                //MessageBox.Show($"New folder created or renamed: {e.FullPath}");
+
+                // loop until the folder is the target file
+                while (!Directory.GetFiles(e.FullPath).Any(file =>
+                    string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    await Task.Delay(1000); // 每秒检查一次，可以根据实际情况调整
+                }
+
+                // get folder's all files
+                string[] files = Directory.GetFiles(e.FullPath);
+
+                // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
+                foreach (string file in files)
+                {
+                    if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        string fileName = Path.GetFileName(file);
+                        // cut the "." and words after the "." of fileName
+                        fileName = fileName.Substring(0, fileName.IndexOf("."));
+
+                        string newFileName = fileName + "_" + Path.GetFileName(e.FullPath) + ".txt";
+                        string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                        File.Copy(file, newFilePath, true);
+                        //Console.WriteLine($"New file created: {newFilePath}");
+                    }
+                }
+            }
+        }
+
+
 
         private void btnClose_Click(object sender, EventArgs e)
         {

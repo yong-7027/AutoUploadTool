@@ -63,7 +63,7 @@
             // 
             // btnMonitorFolder
             // 
-            this.btnMonitorFolder.Location = new System.Drawing.Point(487, 54);
+            this.btnMonitorFolder.Location = new System.Drawing.Point(464, 54);
             this.btnMonitorFolder.Name = "btnMonitorFolder";
             this.btnMonitorFolder.Size = new System.Drawing.Size(75, 23);
             this.btnMonitorFolder.TabIndex = 2;
@@ -107,7 +107,7 @@
             // 
             // btnDestinationFolder
             // 
-            this.btnDestinationFolder.Location = new System.Drawing.Point(487, 175);
+            this.btnDestinationFolder.Location = new System.Drawing.Point(464, 173);
             this.btnDestinationFolder.Name = "btnDestinationFolder";
             this.btnDestinationFolder.Size = new System.Drawing.Size(75, 23);
             this.btnDestinationFolder.TabIndex = 7;
@@ -121,7 +121,7 @@
             this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStart.Location = new System.Drawing.Point(28, 344);
+            this.btnStart.Location = new System.Drawing.Point(25, 245);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 8;
@@ -134,7 +134,7 @@
             this.btnStop.BackColor = System.Drawing.Color.Red;
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStop.Location = new System.Drawing.Point(155, 344);
+            this.btnStop.Location = new System.Drawing.Point(124, 245);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 9;
@@ -144,7 +144,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(348, 344);
+            this.btnClose.Location = new System.Drawing.Point(228, 245);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
@@ -154,7 +154,7 @@
             // 
             // btnChangeSetting
             // 
-            this.btnChangeSetting.Location = new System.Drawing.Point(25, 222);
+            this.btnChangeSetting.Location = new System.Drawing.Point(25, 201);
             this.btnChangeSetting.Name = "btnChangeSetting";
             this.btnChangeSetting.Size = new System.Drawing.Size(95, 23);
             this.btnChangeSetting.TabIndex = 11;
@@ -164,7 +164,7 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(169, 221);
+            this.btnApply.Location = new System.Drawing.Point(272, 201);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 12;
@@ -174,7 +174,7 @@
             // 
             // btnCancelSetting
             // 
-            this.btnCancelSetting.Location = new System.Drawing.Point(298, 221);
+            this.btnCancelSetting.Location = new System.Drawing.Point(353, 201);
             this.btnCancelSetting.Name = "btnCancelSetting";
             this.btnCancelSetting.Size = new System.Drawing.Size(75, 23);
             this.btnCancelSetting.TabIndex = 13;
@@ -186,7 +186,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(603, 406);
+            this.ClientSize = new System.Drawing.Size(558, 293);
             this.Controls.Add(this.btnCancelSetting);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnChangeSetting);
