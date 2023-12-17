@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.txtBoxMonitorFolder = new System.Windows.Forms.TextBox();
             this.btnMonitorFolder = new System.Windows.Forms.Button();
@@ -47,15 +48,16 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(22, 25);
+            this.label1.Location = new System.Drawing.Point(22, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 13);
+            this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Monitoring Folder";
+            this.label1.Text = "Monitoring Folder :";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // txtBoxMonitorFolder
             // 
-            this.txtBoxMonitorFolder.Location = new System.Drawing.Point(25, 54);
+            this.txtBoxMonitorFolder.Location = new System.Drawing.Point(25, 28);
             this.txtBoxMonitorFolder.Name = "txtBoxMonitorFolder";
             this.txtBoxMonitorFolder.Size = new System.Drawing.Size(433, 20);
             this.txtBoxMonitorFolder.TabIndex = 1;
@@ -63,7 +65,7 @@
             // 
             // btnMonitorFolder
             // 
-            this.btnMonitorFolder.Location = new System.Drawing.Point(464, 54);
+            this.btnMonitorFolder.Location = new System.Drawing.Point(464, 25);
             this.btnMonitorFolder.Name = "btnMonitorFolder";
             this.btnMonitorFolder.Size = new System.Drawing.Size(75, 23);
             this.btnMonitorFolder.TabIndex = 2;
@@ -74,32 +76,32 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(25, 95);
+            this.label2.Location = new System.Drawing.Point(22, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(174, 13);
+            this.label2.Size = new System.Drawing.Size(316, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Target File Name (e.g.  example.txt)";
+            this.label2.Text = "Target File Name (Include file name extensions e.g.  example.txt) :";
             // 
             // txtTargetFileName
             // 
-            this.txtTargetFileName.Location = new System.Drawing.Point(25, 111);
+            this.txtTargetFileName.Location = new System.Drawing.Point(25, 67);
             this.txtTargetFileName.Name = "txtTargetFileName";
-            this.txtTargetFileName.Size = new System.Drawing.Size(205, 20);
+            this.txtTargetFileName.Size = new System.Drawing.Size(375, 20);
             this.txtTargetFileName.TabIndex = 4;
             this.txtTargetFileName.TextChanged += new System.EventHandler(this.txtTargetFileName_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 149);
+            this.label3.Location = new System.Drawing.Point(22, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 13);
+            this.label3.Size = new System.Drawing.Size(98, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Destination Folder";
+            this.label3.Text = "Destination Folder :";
             // 
             // txtDestinationFolder
             // 
-            this.txtDestinationFolder.Location = new System.Drawing.Point(25, 175);
+            this.txtDestinationFolder.Location = new System.Drawing.Point(25, 106);
             this.txtDestinationFolder.Name = "txtDestinationFolder";
             this.txtDestinationFolder.Size = new System.Drawing.Size(433, 20);
             this.txtDestinationFolder.TabIndex = 6;
@@ -107,7 +109,7 @@
             // 
             // btnDestinationFolder
             // 
-            this.btnDestinationFolder.Location = new System.Drawing.Point(464, 173);
+            this.btnDestinationFolder.Location = new System.Drawing.Point(464, 103);
             this.btnDestinationFolder.Name = "btnDestinationFolder";
             this.btnDestinationFolder.Size = new System.Drawing.Size(75, 23);
             this.btnDestinationFolder.TabIndex = 7;
@@ -121,7 +123,7 @@
             this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStart.Location = new System.Drawing.Point(25, 245);
+            this.btnStart.Location = new System.Drawing.Point(25, 177);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 8;
@@ -134,7 +136,7 @@
             this.btnStop.BackColor = System.Drawing.Color.Red;
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStop.Location = new System.Drawing.Point(124, 245);
+            this.btnStop.Location = new System.Drawing.Point(121, 177);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 9;
@@ -144,7 +146,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(228, 245);
+            this.btnClose.Location = new System.Drawing.Point(220, 177);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
@@ -154,7 +156,7 @@
             // 
             // btnChangeSetting
             // 
-            this.btnChangeSetting.Location = new System.Drawing.Point(25, 201);
+            this.btnChangeSetting.Location = new System.Drawing.Point(25, 132);
             this.btnChangeSetting.Name = "btnChangeSetting";
             this.btnChangeSetting.Size = new System.Drawing.Size(95, 23);
             this.btnChangeSetting.TabIndex = 11;
@@ -164,7 +166,7 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(272, 201);
+            this.btnApply.Location = new System.Drawing.Point(277, 132);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 12;
@@ -174,7 +176,7 @@
             // 
             // btnCancelSetting
             // 
-            this.btnCancelSetting.Location = new System.Drawing.Point(353, 201);
+            this.btnCancelSetting.Location = new System.Drawing.Point(358, 132);
             this.btnCancelSetting.Name = "btnCancelSetting";
             this.btnCancelSetting.Size = new System.Drawing.Size(75, 23);
             this.btnCancelSetting.TabIndex = 13;
@@ -186,7 +188,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(558, 293);
+            this.ClientSize = new System.Drawing.Size(558, 210);
             this.Controls.Add(this.btnCancelSetting);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnChangeSetting);
@@ -201,6 +203,7 @@
             this.Controls.Add(this.btnMonitorFolder);
             this.Controls.Add(this.txtBoxMonitorFolder);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Auto Upload Tool";
             this.Load += new System.EventHandler(this.Form1_Load);

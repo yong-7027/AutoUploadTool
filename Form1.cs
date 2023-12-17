@@ -115,6 +115,8 @@ namespace AutoUploadTool
                 btnStart.BackColor = Color.Green;
                 initializaion = true;
             }
+            btnApply.Hide();
+            btnCancelSetting.Hide();
             
         }
         
@@ -389,6 +391,9 @@ namespace AutoUploadTool
             btnChangeSetting.Enabled = false;
             btnApply.Enabled = true;
             btnCancelSetting.Enabled = true;
+
+            btnApply.Show();
+            btnCancelSetting.Show();
         }
 
         private void btnApply_Click(object sender, EventArgs e)
@@ -404,11 +409,19 @@ namespace AutoUploadTool
                 MessageBox.Show("Please enter a valid Destination folder path!");
                 return;
             }
+            else if (txtTargetFileName.Text == "")
+            {
+                MessageBox.Show("Please enter a valid Target file name!");
+                return;
+            }
             else
             {
                 toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
                 toolSetting.targetFileName = txtTargetFileName.Text;
                 toolSetting.destinateFolderPath = txtDestinationFolder.Text;
+                initializaion = true;
+
+
             }
 
 
@@ -430,6 +443,9 @@ namespace AutoUploadTool
             btnChangeSetting.Enabled = true;
             btnApply.Enabled = false;
             btnCancelSetting.Enabled = false;
+
+            btnCancelSetting.Hide();
+            btnApply.Hide();
 
         }
 
@@ -472,6 +488,14 @@ namespace AutoUploadTool
                 btnStart.Enabled = true;
                 btnStart.BackColor = Color.Green;
             }
+
+            btnCancelSetting.Hide();
+            btnApply.Hide();
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
 
         }
     }
