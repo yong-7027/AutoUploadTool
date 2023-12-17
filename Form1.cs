@@ -108,6 +108,7 @@ namespace AutoUploadTool
                 btnStart.Enabled = false;
                 btnStart.BackColor = Color.Gray;
                 initializaion = false;
+                btnChangeSetting.Focus();
             }
             else
             {
