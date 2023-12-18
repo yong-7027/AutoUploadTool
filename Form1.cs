@@ -16,7 +16,7 @@ public struct ToolSetting
     public string destinateFolderPath;
 }
 
-namespace AutoUploadTool
+namespace FetchUploadTool
 {
     
     public partial class Form1 : Form
@@ -40,17 +40,17 @@ namespace AutoUploadTool
             InitializeComponent();
             
 
-            // 检查文件是否存在，如果不存在，则创建文件并写入数据
+            // check if the binary file exist, if not, create one
             if (!File.Exists(binDataFilePath))
             {
-                // 将整个结构体写入二进制文件
+                // write default settings to binary file
                 WriteStructToBinaryFile(binDataFilePath, defaultSettings);
             }
 
-            // 从二进制文件中读取整个结构体
+            // read settings from binary file
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
 
-            // 输出读取的结构体数据
+            // show settings in text box
             //Console.WriteLine($"MonitorFolderPath: {readSettings.monitorFolderPath}, TargetFileName: {readSettings.targetFileName}, DestinateFolderPath: {readSettings.destinateFolderPath}");
             //message box
             //MessageBox.Show($"MonitorFolderPath: {toolSetting.monitorFolderPath}, TargetFileName: {toolSetting.targetFileName}, DestinateFolderPath: {toolSetting.destinateFolderPath}");
@@ -60,16 +60,16 @@ namespace AutoUploadTool
         {
             using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
-                // 设置对话框的描述
-                folderBrowserDialog.Description = "选择文件夹位置";
+                // dialog description
+                folderBrowserDialog.Description = "Select Folder Location that you want to monitor";
 
-                // 显示对话框并获取用户的操作结果
+                // show dialog and get user operation result
                 DialogResult result = folderBrowserDialog.ShowDialog();
 
-                // 检查用户是否点击了“确定”按钮
+                // check if user click "OK" button
                 if (result == DialogResult.OK)
                 {
-                    // 获取用户选择的文件夹路径并显示在文本框中
+                    // get user selected folder path and show in text box
                     toolSetting.monitorFolderPath = folderBrowserDialog.SelectedPath;
                     txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;                                        
                 }
@@ -78,6 +78,7 @@ namespace AutoUploadTool
 
         private void Form1_Load(object sender, EventArgs e)
         {
+           
             CenterToScreen();
            
             //string content = reader.ReadToEnd();
@@ -109,6 +110,7 @@ namespace AutoUploadTool
                 btnStart.BackColor = Color.Gray;
                 initializaion = false;
                 btnChangeSetting.Focus();
+                
             }
             else
             {
@@ -122,26 +124,26 @@ namespace AutoUploadTool
         }
         
 
-        // 将整个结构体写入二进制文件
+        // write the whole struct to binary file
         static void WriteStructToBinaryFile(string filePath, ToolSetting data)
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
             {
-                // 将整个结构体写入二进制文件
+                // write the whole struct to binary file
                 writer.Write(data.monitorFolderPath);
                 writer.Write(data.targetFileName);
                 writer.Write(data.destinateFolderPath);
             }
         }
 
-        // 从二进制文件中读取整个结构体
+        // read the whole struct from binary file
         static ToolSetting ReadStructFromBinaryFile(string filePath)
         {
             ToolSetting data = new ToolSetting();
 
             using (BinaryReader reader = new BinaryReader(File.Open(filePath, FileMode.Open)))
             {
-                // 从二进制文件中读取整个结构体
+                // read the whole struct from binary file
                 data.monitorFolderPath = reader.ReadString();
                 data.targetFileName = reader.ReadString();
                 data.destinateFolderPath = reader.ReadString();
@@ -160,16 +162,16 @@ namespace AutoUploadTool
         {
             using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
-                // 设置对话框的描述
-                folderBrowserDialog.Description = "选择文件夹位置";
+                // set dialog description
+                folderBrowserDialog.Description = "Select the location of Destination Folder";
 
-                // 显示对话框并获取用户的操作结果
+                // show dialog and get user operation result
                 DialogResult result = folderBrowserDialog.ShowDialog();
 
-                // 检查用户是否点击了“确定”按钮
+                // check if user click "OK" button
                 if (result == DialogResult.OK)
                 {
-                    // 获取用户选择的文件夹路径并显示在文本框中
+                    // get user selected folder path and show in text box
                     toolSetting.destinateFolderPath = folderBrowserDialog.SelectedPath;
                     txtDestinationFolder.Text = toolSetting.destinateFolderPath;
                 }
@@ -184,26 +186,26 @@ namespace AutoUploadTool
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            // 指定要监控的文件夹路径
-            //string folderPathToMonitor = @"C:\Users\tcy70\Desktop\checkFolder";
+            // set the folder path to monitor
+            //string folderPathToMonitor = @"C:\Users\tcy\Desktop\checkFolder";
 
-            // 创建一个新的 FileSystemWatcher 对象
+            // create a new FileSystemWatcher and set its properties
             watcher = new FileSystemWatcher(toolSetting.monitorFolderPath);
 
-            // 监控所有类型的文件变化，包括子文件夹
+            // monitor all changes in the folder including subfolders
             watcher.IncludeSubdirectories = true;
 
-            // 设置要监控的事件类型
+            // set the file type to monitor
             watcher.NotifyFilter = NotifyFilters.DirectoryName;
 
-            // 事件处理程序，当文件夹被创建时触发
+            // event handlers when a new folder is created
             watcher.Created += OnFolderCreated;
 
-            // 启动监控
+            // start to monitor
             watcher.EnableRaisingEvents = true;
 
             //Console.WriteLine($"Monitoring folder: {toolSetting.monitorFolderPath}");
-            MessageBox.Show($"Monitoring folder: {toolSetting.monitorFolderPath}");
+            //MessageBox.Show($"Monitoring folder: {toolSetting.monitorFolderPath}");
             btnStart.Enabled = false;
             btnStop.Enabled = true;
             btnStop.BackColor = Color.Red;
@@ -214,7 +216,7 @@ namespace AutoUploadTool
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            // 停止监控
+            // stop monitoring
             if (watcher != null)
             {
                 watcher.EnableRaisingEvents = false;
@@ -240,7 +242,7 @@ namespace AutoUploadTool
                 
 
 
-                // 在这里执行您想要触发的函数
+                // execute the function you want to trigger here
                 //Console.WriteLine($"New folder created: {e.FullPath}");
                 MessageBox.Show($"New folder created: {e.FullPath}");
 
@@ -273,7 +275,7 @@ namespace AutoUploadTool
                 }
             }
         }
-        */
+        
         /*
         private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
         {
@@ -283,7 +285,7 @@ namespace AutoUploadTool
 
             if (e.ChangeType == WatcherChangeTypes.Created)
             {
-                // 在这里执行您想要触发的函数
+                // execute the function you want to trigger here
                 // Console.WriteLine($"New folder created: {e.FullPath}");
                 MessageBox.Show($"New folder created: {e.FullPath}");
 
@@ -294,7 +296,7 @@ namespace AutoUploadTool
                 while (!Directory.Exists(e.FullPath) || !Directory.GetFiles(e.FullPath).Any(file =>
                     string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    await Task.Delay(1000); // 每秒检查一次，可以根据实际情况调整
+                    await Task.Delay(1000); // every second check once, can be adjusted according to the actual situation
                 }
 
                 // get folder's all files
@@ -326,7 +328,7 @@ namespace AutoUploadTool
 
             if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Renamed)
             {
-                // 在这里执行您想要触发的函数
+                // execute the function you want to trigger here
                 // Console.WriteLine($"New folder created or renamed: {e.FullPath}");
                 //MessageBox.Show($"New folder created or renamed: {e.FullPath}");
 
@@ -334,7 +336,7 @@ namespace AutoUploadTool
                 while (!Directory.GetFiles(e.FullPath).Any(file =>
                     string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
                 {
-                    await Task.Delay(1000); // 每秒检查一次，可以根据实际情况调整
+                    await Task.Delay(1); // every ? second check once, can be adjusted according to the actual situation
                 }
 
                 // get folder's all files
@@ -345,6 +347,17 @@ namespace AutoUploadTool
                 {
                     if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
                     {
+                        //check if the file content is empty, if empty, refresh the file
+                        FileInfo fileInfo = new FileInfo(file);
+                        if(fileInfo.Length == 0)
+                        {
+                            while (fileInfo.Length == 0)
+                            {
+                                //await Task.Delay(1);
+                                fileInfo.Refresh();
+                            }
+                        }
+
                         string fileName = Path.GetFileName(file);
                         // cut the "." and words after the "." of fileName
                         fileName = fileName.Substring(0, fileName.IndexOf("."));
@@ -362,7 +375,7 @@ namespace AutoUploadTool
 
         private void btnClose_Click(object sender, EventArgs e)
         {
-            // 停止监控
+            // stop monitoring
             if (watcher != null)
             {
                 watcher.EnableRaisingEvents = false;
@@ -496,6 +509,11 @@ namespace AutoUploadTool
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }

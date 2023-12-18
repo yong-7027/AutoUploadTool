@@ -1,4 +1,4 @@
-﻿namespace AutoUploadTool
+﻿namespace FetchUploadTool
 {
     partial class Form1
     {
@@ -48,9 +48,10 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(22, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 13);
+            this.label1.Size = new System.Drawing.Size(110, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "Monitoring Folder :";
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -76,11 +77,13 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(22, 51);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(316, 13);
+            this.label2.Size = new System.Drawing.Size(367, 15);
             this.label2.TabIndex = 3;
             this.label2.Text = "Target File Name (Include file name extensions e.g.  example.txt) :";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // txtTargetFileName
             // 
@@ -93,9 +96,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(22, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(98, 13);
+            this.label3.Size = new System.Drawing.Size(113, 15);
             this.label3.TabIndex = 5;
             this.label3.Text = "Destination Folder :";
             // 
@@ -121,7 +125,8 @@
             // 
             this.btnStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.btnStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.btnStart.Location = new System.Drawing.Point(25, 177);
             this.btnStart.Name = "btnStart";
@@ -134,7 +139,10 @@
             // btnStop
             // 
             this.btnStop.BackColor = System.Drawing.Color.Red;
-            this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnStop.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnStop.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btnStop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
+            this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.btnStop.Location = new System.Drawing.Point(121, 177);
             this.btnStop.Name = "btnStop";
@@ -205,7 +213,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Auto Upload Tool";
+            this.Text = "Fetch&Upload Tool";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
