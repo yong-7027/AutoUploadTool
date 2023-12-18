@@ -28,10 +28,12 @@ namespace FetchUploadTool
         };
         ToolSetting toolSetting = new ToolSetting();
         string binDataFilePath = "settings.bin";
+        
 
         private FileSystemWatcher watcher;
         Boolean initializaion;
-
+        
+        List<LogInfo> logList;
 
 
 
@@ -49,6 +51,18 @@ namespace FetchUploadTool
 
             // read settings from binary file
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+
+            if (!File.Exists("Log.bin"))
+            {
+                using (FileStream fs = new FileStream("Log.bin", FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+
+
+
+
 
             // show settings in text box
             //Console.WriteLine($"MonitorFolderPath: {readSettings.monitorFolderPath}, TargetFileName: {readSettings.targetFileName}, DestinateFolderPath: {readSettings.destinateFolderPath}");
@@ -78,7 +92,7 @@ namespace FetchUploadTool
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+            
             CenterToScreen();
            
             //string content = reader.ReadToEnd();
@@ -120,6 +134,17 @@ namespace FetchUploadTool
             }
             btnApply.Hide();
             btnCancelSetting.Hide();
+
+
+            // read loglist
+            if (!File.Exists("Log.bin"))
+            {
+                using (FileStream fs = new FileStream("Log.bin", FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            logList = ReadLogFromBinaryFile("log.bin");
             
         }
         
@@ -366,6 +391,46 @@ namespace FetchUploadTool
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
                         File.Copy(file, newFilePath, true);
                         //Console.WriteLine($"New file created: {newFilePath}");
+
+                        // log section
+                        List<LogInfo> loglist = ReadLogFromBinaryFile("Log.bin");
+
+
+                        //write the log
+                        LogInfo log = new LogInfo();
+                        //get the time
+                        log.actionTime = DateTime.Now.ToString("HH:mm:ss");
+                        log.year = DateTime.Now.ToString("yyyy");
+                        log.month = DateTime.Now.ToString("MM");
+                        log.day = DateTime.Now.ToString("dd");
+                        log.fileName = newFileName;
+                        log.filePath = e.FullPath;
+                        log.status = "Successful";
+                        log.folderName = Path.GetFileName(e.FullPath);
+                        FileInfo fileInfo1 = new FileInfo(file);
+                        log.fileSize = fileInfo1.Length;
+                        log.destinationPath = newFilePath;
+                        log.destinationFolderName= Path.GetFileName(toolSetting.destinateFolderPath);
+
+
+                        loglist.Add(log);
+
+                        WriteLogToBinaryFile("Log.bin", loglist);
+
+
+                        /*
+                        {
+                            actionTime = ,
+                            status = reader.ReadString(),
+                            year = reader.ReadInt32(),
+                            month = reader.ReadInt32(),
+                            day = reader.ReadInt32(),
+                            folderName = reader.ReadString(),
+                            fileName = reader.ReadString(),
+                            filePath = reader.ReadString()
+                        };
+                        */
+
                     }
                 }
             }
@@ -516,6 +581,66 @@ namespace FetchUploadTool
         private void label2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void linkLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Form2 form2 = new Form2();
+            form2.Show();
+        }
+
+
+        static void WriteLogToBinaryFile(string filePath, List<LogInfo> data)
+        {
+            using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
+            {
+                foreach (var log in data)
+                {
+                    // write 
+                    writer.Write(log.actionTime);
+                    writer.Write(log.status);
+                    writer.Write(log.year);
+                    writer.Write(log.month);
+                    writer.Write(log.day);
+                    writer.Write(log.folderName);
+                    writer.Write(log.fileName);
+                    writer.Write(log.filePath);
+                    writer.Write(log.fileSize);
+                    writer.Write(log.destinationPath);
+                    writer.Write(log.destinationFolderName);
+                }
+            }
+        }
+        static List<LogInfo> ReadLogFromBinaryFile(string filePath)
+        {
+            List<LogInfo> data = new List<LogInfo>();
+
+            using (BinaryReader reader = new BinaryReader(File.Open(filePath, FileMode.Open)))
+            {
+                // read
+                while (reader.BaseStream.Position < reader.BaseStream.Length)
+                {
+                    LogInfo log = new LogInfo
+                    {
+                        actionTime = reader.ReadString(),
+                        status = reader.ReadString(),
+                        year = reader.ReadString(),
+                        month = reader.ReadString(),
+                        day = reader.ReadString(),
+                        folderName = reader.ReadString(),
+                        fileName = reader.ReadString(),
+                        filePath = reader.ReadString(),
+                        fileSize = reader.ReadInt64(),
+                        destinationPath = reader.ReadString(),
+                        destinationFolderName = reader.ReadString()
+                    };
+
+                    // add to list
+                    data.Add(log);
+                }
+            }
+
+            return data;
         }
     }
 }
