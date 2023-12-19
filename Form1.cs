@@ -36,7 +36,7 @@ namespace FetchUploadTool
         Boolean initializaion;
         
         List<LogInfo> logList;
-
+        
 
 
         public Form1()
@@ -399,9 +399,7 @@ namespace FetchUploadTool
 
             if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Renamed)
             {
-                // execute the function you want to trigger here
-                // Console.WriteLine($"New folder created or renamed: {e.FullPath}");
-                //MessageBox.Show($"New folder created or renamed: {e.FullPath}");
+                
 
                 // loop until the folder is the target file
                 while (!Directory.GetFiles(e.FullPath).Any(file =>
@@ -432,12 +430,12 @@ namespace FetchUploadTool
                         // get model
                         string model = FindAndExtract(file, "CTM|");
 
-                        MessageBox.Show(e.FullPath);
+                        //MessageBox.Show(e.FullPath);
                         string fileName = Path.GetFileName(file);
                         // cut the "." and words after the "." of fileName
                         fileName = fileName.Substring(0, fileName.IndexOf("."));
 
-                        string newFileName = toolSetting.line+"_"+model+"_"+fileName + "_" + Path.GetFileName(e.FullPath) + ".txt";
+                        string newFileName = toolSetting.line+"_"+model + "_" + Path.GetFileName(e.FullPath) + "_" + fileName + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
                         File.Copy(file, newFilePath, true);
                         //Console.WriteLine($"New file created: {newFilePath}");
@@ -481,23 +479,12 @@ namespace FetchUploadTool
                         using (StreamWriter sw = new StreamWriter("Log.txt", true))
                         {
                             //sw.WriteLine($"Time: {log.actionTime}, Status: {log.status}, Year: {log.year}, Month: {log.month}, Day: {log.day}, Folder Name: {log.folderName}, File Name: {log.fileName}, File Path: {log.filePath}, File Size: {log.fileSize}, Destination Path: {log.destinationPath}, Destination Folder Name: {log.destinationFolderName}");
-                            sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
+                            sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
                             //sw.WriteLine(" ");
                             //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
                         }
 
-                        /*
-                        {
-                            actionTime = ,
-                            status = reader.ReadString(),
-                            year = reader.ReadInt32(),
-                            month = reader.ReadInt32(),
-                            day = reader.ReadInt32(),
-                            folderName = reader.ReadString(),
-                            fileName = reader.ReadString(),
-                            filePath = reader.ReadString()
-                        };
-                        */
+                        
 
                     }
                 }
@@ -789,16 +776,16 @@ namespace FetchUploadTool
         {
             try
             {
-                // 读取文件的所有行
+                // read all lines from file
                 string[] lines = File.ReadAllLines(filePath);
 
-                // 遍历每一行寻找关键字
+                // search keyword in each line
                 foreach (string currentLine in lines)
                 {
                     int startIndex = currentLine.IndexOf(keyword);
                     if (startIndex != -1)
                     {
-                        // 找到关键字后，截取关键字后面到逗号前面的部分
+                        // find the keyword, extract the number
                         int commaIndex = currentLine.IndexOf(",", startIndex);
                         if (commaIndex != -1)
                         {
@@ -807,13 +794,13 @@ namespace FetchUploadTool
                     }
                 }
 
-                Console.WriteLine("未找到匹配项。");
-                return string.Empty; // 或者可以抛出异常或采取其他适当的处理方式
+                
+                return string.Empty; // 
             }
             catch (Exception ex)
             {
                 Console.WriteLine("发生异常: " + ex.Message);
-                return string.Empty; // 或者可以抛出异常或采取其他适当的处理方式
+                return string.Empty; // 
             }
         }
 

@@ -42,7 +42,7 @@ namespace FetchUploadTool
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            
+            txtLogLocation.Text = "Log Location: " + Directory.GetCurrentDirectory() + "\\log.txt";
             // set dateTimePicker to today
             dateTimePicker1.Value = DateTime.Today;
             // get year, month, day from dateTimePicker
@@ -263,6 +263,11 @@ namespace FetchUploadTool
         private void btnHour_ValueChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void txtLogLocation_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
