@@ -40,7 +40,7 @@ namespace FetchUploadTool
         public Form1()
         { 
             InitializeComponent();
-            
+            this.FormClosing += MainForm_FormClosing;
 
             // check if the binary file exist, if not, create one
             if (!File.Exists(binDataFilePath))
@@ -145,7 +145,24 @@ namespace FetchUploadTool
                 }
             }
             logList = ReadLogFromBinaryFile("log.bin");
-            
+
+
+            // create a txt file to record the log
+            // create text file if not exist
+            if (!File.Exists("Log.txt"))
+            {
+                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            {
+                sw.WriteLine(" ");
+                sw.WriteLine("App oepn time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            }
+
         }
         
 
@@ -237,6 +254,22 @@ namespace FetchUploadTool
             btnStart.BackColor = Color.Gray;
 
             btnChangeSetting.Enabled = false;
+
+
+            if (!File.Exists("Log.txt"))
+            {
+                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            {
+                sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                sw.WriteLine("App \"START\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                
+            }
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -254,6 +287,19 @@ namespace FetchUploadTool
                
             }
             btnChangeSetting.Enabled = true;
+            if (!File.Exists("Log.txt"))
+            {
+                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            {
+                sw.WriteLine("App \"STOP\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+            }
         }
         /*
         private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
@@ -418,6 +464,24 @@ namespace FetchUploadTool
                         WriteLogToBinaryFile("Log.bin", loglist);
 
 
+                        // create a txt file to record the log
+                        // create text file if not exist
+                        if (!File.Exists("Log.txt"))
+                        {
+                            using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                            {
+                                // 
+                            }
+                        }
+                        // write log to txt file
+                        using (StreamWriter sw = new StreamWriter("Log.txt", true))
+                        {
+                            //sw.WriteLine($"Time: {log.actionTime}, Status: {log.status}, Year: {log.year}, Month: {log.month}, Day: {log.day}, Folder Name: {log.folderName}, File Name: {log.fileName}, File Path: {log.filePath}, File Size: {log.fileSize}, Destination Path: {log.destinationPath}, Destination Folder Name: {log.destinationFolderName}");
+                            sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", Status: " + log.status + ", Folder Name: " + log.folderName + ", File Name: " + log.fileName + ", File Path: " + log.filePath + ", File Size: " + log.fileSize +"(bytes)"+", Destination Path: " + log.destinationPath + ", Destination Folder Name: " + log.destinationFolderName);
+                            //sw.WriteLine(" ");
+                            //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                        }
+
                         /*
                         {
                             actionTime = ,
@@ -446,6 +510,7 @@ namespace FetchUploadTool
                 watcher.EnableRaisingEvents = false;
                 watcher.Dispose();
             }
+            
             this.Close();
         }
 
@@ -526,12 +591,33 @@ namespace FetchUploadTool
             btnCancelSetting.Hide();
             btnApply.Hide();
 
+            if (!File.Exists("Log.txt"))
+            {
+                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            {
+                sw.WriteLine(" ");
+                //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                sw.WriteLine("App \"Change Setting\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                sw.WriteLine("Monitor Folder Path: " + toolSetting.monitorFolderPath);
+                sw.WriteLine("Target File Name: " + toolSetting.targetFileName);
+                sw.WriteLine("Destination Folder Path: " + toolSetting.destinateFolderPath);
+                sw.WriteLine(" ");
+                //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+            }
+
         }
 
         private void txtBoxMonitorFolder_TextChanged(object sender, EventArgs e)
         {
 
             toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
+            
         }
 
         private void btnCancelSetting_Click(object sender, EventArgs e)
@@ -642,5 +728,29 @@ namespace FetchUploadTool
 
             return data;
         }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (!File.Exists("Log.txt"))
+                {
+                    using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                    {
+                        // 
+                    }
+                }
+                // write log to txt file
+                using (StreamWriter sw = new StreamWriter("Log.txt", true))
+                {
+                    sw.WriteLine("App Close time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                    sw.WriteLine(" ");
+                }
+            }
+        }
+
+        
     }
 }
+

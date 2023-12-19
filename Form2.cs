@@ -96,7 +96,7 @@ namespace FetchUploadTool
                     sb.AppendLine("File Size: " + log.fileSize);
                     
                     
-                    sb.AppendLine("--------------------------------------------------------------------------------");
+                    sb.AppendLine("--------------------------------------------------------------------------------------------------------------------------------------------");
                 }
                 // check if sb is empty
                 if (sb.Length == 0)
@@ -185,10 +185,10 @@ namespace FetchUploadTool
                     sb.AppendLine("Destination Folder: " + log.destinationFolderName);
                     sb.AppendLine("Destination Path: " + log.destinationPath);
 
-                    sb.AppendLine("File Size: " + log.fileSize);
+                    sb.AppendLine("File Size: " + log.fileSize+ "(bytes)");
 
 
-                    sb.AppendLine("--------------------------------------------------------------------------------");
+                    sb.AppendLine("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 }
                 // check if sb is empty
                 if (sb.Length == 0)
