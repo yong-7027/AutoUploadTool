@@ -48,6 +48,7 @@
             this.numericUpDownLine = new System.Windows.Forms.NumericUpDown();
             this.txtLogPath = new System.Windows.Forms.Label();
             this.btnLogPath = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).BeginInit();
             this.SuspendLayout();
             // 
@@ -201,7 +202,7 @@
             // linkLog
             // 
             this.linkLog.AutoSize = true;
-            this.linkLog.Location = new System.Drawing.Point(407, 269);
+            this.linkLog.Location = new System.Drawing.Point(488, 240);
             this.linkLog.Name = "linkLog";
             this.linkLog.Size = new System.Drawing.Size(51, 13);
             this.linkLog.TabIndex = 14;
@@ -212,7 +213,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(26, 15);
+            this.label4.Location = new System.Drawing.Point(22, 18);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(36, 13);
             this.label4.TabIndex = 15;
@@ -221,16 +222,17 @@
             // 
             // numericUpDownLine
             // 
-            this.numericUpDownLine.Location = new System.Drawing.Point(68, 12);
+            this.numericUpDownLine.Location = new System.Drawing.Point(64, 16);
             this.numericUpDownLine.Name = "numericUpDownLine";
             this.numericUpDownLine.Size = new System.Drawing.Size(43, 20);
             this.numericUpDownLine.TabIndex = 16;
             this.numericUpDownLine.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numericUpDownLine.ValueChanged += new System.EventHandler(this.numericUpDownLine_ValueChanged);
             // 
             // txtLogPath
             // 
             this.txtLogPath.AutoSize = true;
-            this.txtLogPath.Location = new System.Drawing.Point(31, 173);
+            this.txtLogPath.Location = new System.Drawing.Point(109, 173);
             this.txtLogPath.Name = "txtLogPath";
             this.txtLogPath.Size = new System.Drawing.Size(69, 13);
             this.txtLogPath.TabIndex = 17;
@@ -241,17 +243,27 @@
             // 
             this.btnLogPath.Location = new System.Drawing.Point(464, 168);
             this.btnLogPath.Name = "btnLogPath";
-            this.btnLogPath.Size = new System.Drawing.Size(92, 23);
+            this.btnLogPath.Size = new System.Drawing.Size(75, 23);
             this.btnLogPath.TabIndex = 18;
-            this.btnLogPath.Text = "Log File Path:";
+            this.btnLogPath.Text = "Browser";
             this.btnLogPath.UseVisualStyleBackColor = true;
             this.btnLogPath.Click += new System.EventHandler(this.btnLogPath_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(20, 173);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(91, 13);
+            this.label5.TabIndex = 19;
+            this.label5.Text = "Log File Location:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(663, 289);
+            this.ClientSize = new System.Drawing.Size(566, 282);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.btnLogPath);
             this.Controls.Add(this.txtLogPath);
             this.Controls.Add(this.numericUpDownLine);
@@ -302,6 +314,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDownLine;
         private System.Windows.Forms.Label txtLogPath;
         private System.Windows.Forms.Button btnLogPath;
+        private System.Windows.Forms.Label label5;
     }
 }
 

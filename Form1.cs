@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -83,8 +84,10 @@ namespace FetchUploadTool
                 if (result == DialogResult.OK)
                 {
                     // get user selected folder path and show in text box
-                    toolSetting.monitorFolderPath = folderBrowserDialog.SelectedPath;
-                    txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;                                        
+                    //toolSetting.monitorFolderPath = folderBrowserDialog.SelectedPath;
+                    //txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;   
+                    
+                    txtBoxMonitorFolder.Text=folderBrowserDialog.SelectedPath;
                 }
             }
         }
@@ -167,7 +170,7 @@ namespace FetchUploadTool
             using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
             {
                 sw.WriteLine(" ");
-                sw.WriteLine("App oepn time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                sw.WriteLine("App open  time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
             }
 
         }
@@ -207,7 +210,7 @@ namespace FetchUploadTool
 
         private void txtTargetFileName_TextChanged(object sender, EventArgs e)
         {
-            toolSetting.targetFileName = txtTargetFileName.Text;
+            
            
         }
 
@@ -225,15 +228,17 @@ namespace FetchUploadTool
                 if (result == DialogResult.OK)
                 {
                     // get user selected folder path and show in text box
-                    toolSetting.destinateFolderPath = folderBrowserDialog.SelectedPath;
-                    txtDestinationFolder.Text = toolSetting.destinateFolderPath;
+                    //toolSetting.destinateFolderPath = folderBrowserDialog.SelectedPath;
+                    //txtDestinationFolder.Text = toolSetting.destinateFolderPath;
+
+                    txtDestinationFolder.Text = folderBrowserDialog.SelectedPath;
                 }
             }
         }
 
         private void txtDestinationFolder_TextChanged(object sender, EventArgs e)
         {
-            toolSetting.destinateFolderPath = txtDestinationFolder.Text;
+            //toolSetting.destinateFolderPath = txtDestinationFolder.Text;
             
         }
 
@@ -577,6 +582,46 @@ namespace FetchUploadTool
             }
             else
             {
+
+
+                if (!File.Exists(toolSetting.LogFilePath))
+                {
+                    using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                    {
+                        // 
+                    }
+                }
+                // write log to txt file
+                using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                {
+                    sw.WriteLine(" ");
+                    //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                    sw.WriteLine("App \"Change Setting\" Time(" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")+")");
+                    sw.WriteLine("Line Number        > From:" + toolSetting.line);
+                    sw.WriteLine("                     To  :" + "L" + numericUpDownLine.Value.ToString());
+                    sw.WriteLine("Monitor Folder     > From:" + toolSetting.monitorFolderPath);
+                    sw.WriteLine("                     To  :" + txtBoxMonitorFolder.Text);
+                    sw.WriteLine("Target File Name   > From:" + toolSetting.targetFileName);
+                    sw.WriteLine("                     To  :" + txtTargetFileName.Text);
+                    sw.WriteLine("Destination Folder > From:" + toolSetting.destinateFolderPath);
+                    sw.WriteLine("                     To  :" + txtDestinationFolder.Text);
+                    sw.WriteLine("Log File Path      > From:" + toolSetting.LogFilePath);
+                    sw.WriteLine("                     To  :" + txtLogPath.Text);
+                    
+                    sw.WriteLine(" ");
+                    //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                }
+
+                // if log file path changed, copy the old log file to new path
+                if(toolSetting.LogFilePath != txtLogPath.Text)
+                {
+                    File.Copy(toolSetting.LogFilePath, txtLogPath.Text, true);
+                }
+                
+
+
+
+
                 toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
                 toolSetting.targetFileName = txtTargetFileName.Text;
                 toolSetting.destinateFolderPath = txtDestinationFolder.Text;
@@ -613,33 +658,14 @@ namespace FetchUploadTool
             btnCancelSetting.Hide();
             btnApply.Hide();
 
-            if (!File.Exists(toolSetting.LogFilePath))
-            {
-                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
-                {
-                    // 
-                }
-            }
-            // write log to txt file
-            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
-            {
-                sw.WriteLine(" ");
-                //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-                sw.WriteLine("App \"Change Setting\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
-                sw.WriteLine("Monitor Folder Path: " + toolSetting.monitorFolderPath);
-                sw.WriteLine("Target File Name: " + toolSetting.targetFileName);
-                sw.WriteLine("Destination Folder Path: " + toolSetting.destinateFolderPath);
-                sw.WriteLine("Line Number: " + toolSetting.line);
-                sw.WriteLine(" ");
-                //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
-            }
+            
 
         }
 
         private void txtBoxMonitorFolder_TextChanged(object sender, EventArgs e)
         {
 
-            toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
+            //toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
             
         }
 
@@ -670,6 +696,7 @@ namespace FetchUploadTool
             txtTargetFileName.Text = toolSetting.targetFileName;
             txtDestinationFolder.Text = toolSetting.destinateFolderPath;
             numericUpDownLine.Value = ExtractNumberFromLine(toolSetting.line);
+            txtLogPath.Text = toolSetting.LogFilePath;
             if(initializaion == false)
             {
                 btnStart.Enabled = false;
@@ -841,8 +868,10 @@ namespace FetchUploadTool
                 // check if user click "OK" button
                 if (result == DialogResult.OK)
                 {
-                    toolSetting.LogFilePath = folderBrowserDialog.SelectedPath+@"\Log.txt";
-                    txtLogPath.Text = toolSetting.LogFilePath;
+                    //toolSetting.LogFilePath = folderBrowserDialog.SelectedPath+@"\Log.txt";
+                    //txtLogPath.Text = toolSetting.LogFilePath;
+
+                    txtLogPath.Text = folderBrowserDialog.SelectedPath+@"\Log.txt";
                 }
             }
         }
@@ -850,6 +879,11 @@ namespace FetchUploadTool
         private void txtLogFilePath_change(object sender, EventArgs e)
         {
             
+        }
+
+        private void numericUpDownLine_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
