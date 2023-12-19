@@ -15,6 +15,7 @@ public struct ToolSetting
     public string targetFileName;
     public string destinateFolderPath;
     public string line; //e.g. "L1"
+    public string LogFilePath;
 }
 
 namespace FetchUploadTool
@@ -22,11 +23,13 @@ namespace FetchUploadTool
     
     public partial class Form1 : Form
     {
-        ToolSetting defaultSettings = new ToolSetting { 
-            monitorFolderPath = "", 
-            targetFileName = "", 
+        ToolSetting defaultSettings = new ToolSetting {
+            monitorFolderPath = "",
+            targetFileName = "",
             destinateFolderPath = "",
-            line = "L0"
+            line = "L0",
+            //get current path
+            LogFilePath = System.Environment.CurrentDirectory + @"\Log.txt"
         };
         ToolSetting toolSetting = new ToolSetting();
         string binDataFilePath = "settings.bin";
@@ -62,6 +65,8 @@ namespace FetchUploadTool
                 }
             }
 
+            
+
         }
 
         private void btnMonitorFolder_Click(object sender, EventArgs e)
@@ -88,16 +93,20 @@ namespace FetchUploadTool
         {
             
             CenterToScreen();
-           
+            //MessageBox.Show(toolSetting.LogFilePath);
             //string content = reader.ReadToEnd();
             //txtBoxMonitorFolder.Text = content;
             txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
             txtTargetFileName.Text = toolSetting.targetFileName;
             txtDestinationFolder.Text = toolSetting.destinateFolderPath;
             numericUpDownLine.Value = ExtractNumberFromLine(toolSetting.line);
+            txtLogPath.Text = toolSetting.LogFilePath;
             btnStop.Enabled = false;
             btnStop.BackColor = Color.Gray;
 
+
+            btnLogPath.Enabled = false;
+            
             numericUpDownLine.Enabled = false;
             numericUpDownLine.ReadOnly = true;
 
@@ -147,15 +156,15 @@ namespace FetchUploadTool
 
             // create a txt file to record the log
             // create text file if not exist
-            if (!File.Exists("Log.txt"))
+            if (!File.Exists(toolSetting.LogFilePath))
             {
-                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
                     // 
                 }
             }
             // write log to txt file
-            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
             {
                 sw.WriteLine(" ");
                 sw.WriteLine("App oepn time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
@@ -174,6 +183,7 @@ namespace FetchUploadTool
                 writer.Write(data.targetFileName);
                 writer.Write(data.destinateFolderPath);
                 writer.Write(data.line);
+                writer.Write(data.LogFilePath);
             }
         }
 
@@ -189,6 +199,7 @@ namespace FetchUploadTool
                 data.targetFileName = reader.ReadString();
                 data.destinateFolderPath = reader.ReadString();
                 data.line = reader.ReadString();
+                data.LogFilePath = reader.ReadString();
             }
 
             return data;
@@ -256,15 +267,15 @@ namespace FetchUploadTool
             btnChangeSetting.Enabled = false;
 
 
-            if (!File.Exists("Log.txt"))
+            if (!File.Exists(toolSetting.LogFilePath))
             {
-                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
                     // 
                 }
             }
             // write log to txt file
-            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
             {
                 sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
                 sw.WriteLine("App \"START\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
@@ -287,15 +298,15 @@ namespace FetchUploadTool
                
             }
             btnChangeSetting.Enabled = true;
-            if (!File.Exists("Log.txt"))
+            if (!File.Exists(toolSetting.LogFilePath))
             {
-                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
                     // 
                 }
             }
             // write log to txt file
-            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
             {
                 sw.WriteLine("App \"STOP\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
                 sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
@@ -468,15 +479,15 @@ namespace FetchUploadTool
 
                         // create a txt file to record the log
                         // create text file if not exist
-                        if (!File.Exists("Log.txt"))
+                        if (!File.Exists(toolSetting.LogFilePath))
                         {
-                            using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                            using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                             {
                                 // 
                             }
                         }
                         // write log to txt file
-                        using (StreamWriter sw = new StreamWriter("Log.txt", true))
+                        using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                         {
                             //sw.WriteLine($"Time: {log.actionTime}, Status: {log.status}, Year: {log.year}, Month: {log.month}, Day: {log.day}, Folder Name: {log.folderName}, File Name: {log.fileName}, File Path: {log.filePath}, File Size: {log.fileSize}, Destination Path: {log.destinationPath}, Destination Folder Name: {log.destinationFolderName}");
                             sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
@@ -507,6 +518,8 @@ namespace FetchUploadTool
 
         private void btnChangeSetting_Click(object sender, EventArgs e)
         {
+            btnLogPath.Enabled = true;
+
             numericUpDownLine.Enabled = true;
             numericUpDownLine.ReadOnly = false;
 
@@ -557,12 +570,18 @@ namespace FetchUploadTool
                 MessageBox.Show("Please enter a valid Line number!");
                 return;
             }
+            else if (txtLogPath.Text=="")
+            {
+                MessageBox.Show("Please enter a valid path!");
+                return;
+            }
             else
             {
                 toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
                 toolSetting.targetFileName = txtTargetFileName.Text;
                 toolSetting.destinateFolderPath = txtDestinationFolder.Text;
                 toolSetting.line = "L" + numericUpDownLine.Value.ToString();
+                toolSetting.LogFilePath = txtLogPath.Text;
                 initializaion = true;
 
 
@@ -594,15 +613,15 @@ namespace FetchUploadTool
             btnCancelSetting.Hide();
             btnApply.Hide();
 
-            if (!File.Exists("Log.txt"))
+            if (!File.Exists(toolSetting.LogFilePath))
             {
-                using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
                     // 
                 }
             }
             // write log to txt file
-            using (StreamWriter sw = new StreamWriter("Log.txt", true))
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
             {
                 sw.WriteLine(" ");
                 //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
@@ -742,15 +761,15 @@ namespace FetchUploadTool
             
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (!File.Exists("Log.txt"))
+                if (!File.Exists(toolSetting.LogFilePath))
                 {
-                    using (FileStream fs = new FileStream("Log.txt", FileMode.Create, FileAccess.Write))
+                    using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                     {
                         // 
                     }
                 }
                 // write log to txt file
-                using (StreamWriter sw = new StreamWriter("Log.txt", true))
+                using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                 {
                     sw.WriteLine("App Close time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
                     sw.WriteLine(" ");
@@ -761,7 +780,7 @@ namespace FetchUploadTool
 
         static int ExtractNumberFromLine(string line)
         {
-            // 从第2个字符开始（索引为1），截取到字符串的末尾
+            
             string numberStr = line.Substring(1);
 
             // 将截取的数字部分转换为整数
@@ -799,7 +818,7 @@ namespace FetchUploadTool
             }
             catch (Exception ex)
             {
-                Console.WriteLine("发生异常: " + ex.Message);
+               
                 return string.Empty; // 
             }
         }
@@ -807,6 +826,30 @@ namespace FetchUploadTool
         private void label4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnLogPath_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                // dialog description
+                folderBrowserDialog.Description = "Select Folder Location that you want to place Log file";
+
+                // show dialog and get user operation result
+                DialogResult result = folderBrowserDialog.ShowDialog();
+
+                // check if user click "OK" button
+                if (result == DialogResult.OK)
+                {
+                    toolSetting.LogFilePath = folderBrowserDialog.SelectedPath+@"\Log.txt";
+                    txtLogPath.Text = toolSetting.LogFilePath;
+                }
+            }
+        }
+
+        private void txtLogFilePath_change(object sender, EventArgs e)
+        {
+            
         }
     }
 }

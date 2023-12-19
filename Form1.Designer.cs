@@ -46,6 +46,8 @@
             this.linkLog = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownLine = new System.Windows.Forms.NumericUpDown();
+            this.txtLogPath = new System.Windows.Forms.Label();
+            this.btnLogPath = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).BeginInit();
             this.SuspendLayout();
             // 
@@ -132,7 +134,7 @@
             this.btnStart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStart.Location = new System.Drawing.Point(25, 208);
+            this.btnStart.Location = new System.Drawing.Point(25, 235);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 8;
@@ -148,7 +150,7 @@
             this.btnStop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStop.Location = new System.Drawing.Point(121, 208);
+            this.btnStop.Location = new System.Drawing.Point(124, 235);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 9;
@@ -158,7 +160,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(220, 208);
+            this.btnClose.Location = new System.Drawing.Point(224, 235);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
@@ -168,7 +170,7 @@
             // 
             // btnChangeSetting
             // 
-            this.btnChangeSetting.Location = new System.Drawing.Point(25, 163);
+            this.btnChangeSetting.Location = new System.Drawing.Point(25, 203);
             this.btnChangeSetting.Name = "btnChangeSetting";
             this.btnChangeSetting.Size = new System.Drawing.Size(95, 23);
             this.btnChangeSetting.TabIndex = 11;
@@ -178,7 +180,7 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(277, 163);
+            this.btnApply.Location = new System.Drawing.Point(280, 203);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 12;
@@ -188,7 +190,7 @@
             // 
             // btnCancelSetting
             // 
-            this.btnCancelSetting.Location = new System.Drawing.Point(358, 163);
+            this.btnCancelSetting.Location = new System.Drawing.Point(361, 203);
             this.btnCancelSetting.Name = "btnCancelSetting";
             this.btnCancelSetting.Size = new System.Drawing.Size(75, 23);
             this.btnCancelSetting.TabIndex = 13;
@@ -199,7 +201,7 @@
             // linkLog
             // 
             this.linkLog.AutoSize = true;
-            this.linkLog.Location = new System.Drawing.Point(392, 208);
+            this.linkLog.Location = new System.Drawing.Point(407, 269);
             this.linkLog.Name = "linkLog";
             this.linkLog.Size = new System.Drawing.Size(51, 13);
             this.linkLog.TabIndex = 14;
@@ -225,11 +227,33 @@
             this.numericUpDownLine.TabIndex = 16;
             this.numericUpDownLine.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // txtLogPath
+            // 
+            this.txtLogPath.AutoSize = true;
+            this.txtLogPath.Location = new System.Drawing.Point(31, 173);
+            this.txtLogPath.Name = "txtLogPath";
+            this.txtLogPath.Size = new System.Drawing.Size(69, 13);
+            this.txtLogPath.TabIndex = 17;
+            this.txtLogPath.Text = "Log File Path";
+            this.txtLogPath.Click += new System.EventHandler(this.txtLogFilePath_change);
+            // 
+            // btnLogPath
+            // 
+            this.btnLogPath.Location = new System.Drawing.Point(464, 168);
+            this.btnLogPath.Name = "btnLogPath";
+            this.btnLogPath.Size = new System.Drawing.Size(92, 23);
+            this.btnLogPath.TabIndex = 18;
+            this.btnLogPath.Text = "Log File Path:";
+            this.btnLogPath.UseVisualStyleBackColor = true;
+            this.btnLogPath.Click += new System.EventHandler(this.btnLogPath_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(663, 289);
+            this.Controls.Add(this.btnLogPath);
+            this.Controls.Add(this.txtLogPath);
             this.Controls.Add(this.numericUpDownLine);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.linkLog);
@@ -276,6 +300,8 @@
         private System.Windows.Forms.LinkLabel linkLog;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numericUpDownLine;
+        private System.Windows.Forms.Label txtLogPath;
+        private System.Windows.Forms.Button btnLogPath;
     }
 }
 
