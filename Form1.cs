@@ -18,6 +18,20 @@ public struct ToolSetting
     public string line; //e.g. "L1"
     public string LogFilePath;
 }
+struct LogInfo
+{
+    public string actionTime;
+    public string status;
+    public string year;
+    public string month;
+    public string day;
+    public string folderName;
+    public string fileName;
+    public string filePath;
+    public long fileSize;
+    public string destinationPath;
+    public string destinationFolderName;
+}
 
 namespace FetchUploadTool
 {
@@ -39,7 +53,7 @@ namespace FetchUploadTool
         private FileSystemWatcher watcher;
         Boolean initializaion;
         
-        List<LogInfo> logList;
+        //List<LogInfo> logList;
         
 
 
@@ -147,6 +161,7 @@ namespace FetchUploadTool
 
 
             // read loglist
+            /*
             if (!File.Exists("Log.bin"))
             {
                 using (FileStream fs = new FileStream("Log.bin", FileMode.Create, FileAccess.Write))
@@ -155,7 +170,7 @@ namespace FetchUploadTool
                 }
             }
             logList = ReadLogFromBinaryFile("log.bin");
-
+            */
 
             // create a txt file to record the log
             // create text file if not exist
@@ -457,9 +472,9 @@ namespace FetchUploadTool
                         //Console.WriteLine($"New file created: {newFilePath}");
 
                         // log section
-                        List<LogInfo> loglist = ReadLogFromBinaryFile("Log.bin");
+                        //List<LogInfo> loglist = ReadLogFromBinaryFile("Log.bin");
 
-
+                        
                         //write the log
                         LogInfo log = new LogInfo();
                         //get the time
@@ -477,10 +492,10 @@ namespace FetchUploadTool
                         log.destinationFolderName= Path.GetFileName(toolSetting.destinateFolderPath);
 
 
-                        loglist.Add(log);
+                        //loglist.Add(log);
 
-                        WriteLogToBinaryFile("Log.bin", loglist);
-
+                        //WriteLogToBinaryFile("Log.bin", loglist);
+                        
 
                         // create a txt file to record the log
                         // create text file if not exist
@@ -729,7 +744,7 @@ namespace FetchUploadTool
             form2.Show();
         }
 
-
+        /*
         static void WriteLogToBinaryFile(string filePath, List<LogInfo> data)
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
@@ -751,6 +766,8 @@ namespace FetchUploadTool
                 }
             }
         }
+        */
+        /*
         static List<LogInfo> ReadLogFromBinaryFile(string filePath)
         {
             List<LogInfo> data = new List<LogInfo>();
@@ -782,7 +799,7 @@ namespace FetchUploadTool
 
             return data;
         }
-
+        */
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             
@@ -810,7 +827,7 @@ namespace FetchUploadTool
             
             string numberStr = line.Substring(1);
 
-            // 将截取的数字部分转换为整数
+            
             if (int.TryParse(numberStr, out int extractedNumber))
             {
                 return extractedNumber;

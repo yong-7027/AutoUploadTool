@@ -202,12 +202,13 @@
             // linkLog
             // 
             this.linkLog.AutoSize = true;
-            this.linkLog.Location = new System.Drawing.Point(488, 240);
+            this.linkLog.Location = new System.Drawing.Point(476, 240);
             this.linkLog.Name = "linkLog";
             this.linkLog.Size = new System.Drawing.Size(51, 13);
             this.linkLog.TabIndex = 14;
             this.linkLog.TabStop = true;
             this.linkLog.Text = "View Log";
+            this.linkLog.Visible = false;
             this.linkLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLog_LinkClicked);
             // 
             // label4
@@ -232,7 +233,7 @@
             // txtLogPath
             // 
             this.txtLogPath.AutoSize = true;
-            this.txtLogPath.Location = new System.Drawing.Point(109, 173);
+            this.txtLogPath.Location = new System.Drawing.Point(119, 173);
             this.txtLogPath.Name = "txtLogPath";
             this.txtLogPath.Size = new System.Drawing.Size(69, 13);
             this.txtLogPath.TabIndex = 17;
@@ -252,7 +253,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(20, 173);
+            this.label5.Location = new System.Drawing.Point(22, 173);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(91, 13);
             this.label5.TabIndex = 19;

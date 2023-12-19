@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,20 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-struct LogInfo
-{
-    public string actionTime;
-    public string status;
-    public string year;
-    public string month;
-    public string day;
-    public string folderName;
-    public string fileName;
-    public string filePath;
-    public long fileSize;
-    public string destinationPath;
-    public string destinationFolderName;
-}
+
 
 
 
@@ -271,9 +259,10 @@ namespace FetchUploadTool
         }
     }
 
-
+    
     public static class LogFunc
     {
+        /*
         static void WriteLogToBinaryFile(string filePath, List<LogInfo> data)
         {
             using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
@@ -296,7 +285,9 @@ namespace FetchUploadTool
                 }
             }
         }
+        */
 
+        /*
         static List<LogInfo> ReadLogFromBinaryFile(string filePath)
         {
             List<LogInfo> data = new List<LogInfo>();
@@ -328,5 +319,9 @@ namespace FetchUploadTool
 
             return data;
         }
+        */
+        
     }
+
 }
+
