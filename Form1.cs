@@ -71,7 +71,7 @@ namespace FetchUploadTool
 
             // read settings from binary file
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
-
+            /*
             if (!File.Exists("Log.bin"))
             {
                 using (FileStream fs = new FileStream("Log.bin", FileMode.Create, FileAccess.Write))
@@ -79,7 +79,7 @@ namespace FetchUploadTool
                     // 
                 }
             }
-
+            */
             
 
         }
