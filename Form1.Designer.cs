@@ -44,13 +44,16 @@
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancelSetting = new System.Windows.Forms.Button();
             this.linkLog = new System.Windows.Forms.LinkLabel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numericUpDownLine = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(22, 12);
+            this.label1.Location = new System.Drawing.Point(22, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(110, 15);
             this.label1.TabIndex = 0;
@@ -59,7 +62,7 @@
             // 
             // txtBoxMonitorFolder
             // 
-            this.txtBoxMonitorFolder.Location = new System.Drawing.Point(25, 28);
+            this.txtBoxMonitorFolder.Location = new System.Drawing.Point(25, 59);
             this.txtBoxMonitorFolder.Name = "txtBoxMonitorFolder";
             this.txtBoxMonitorFolder.Size = new System.Drawing.Size(433, 20);
             this.txtBoxMonitorFolder.TabIndex = 1;
@@ -67,7 +70,7 @@
             // 
             // btnMonitorFolder
             // 
-            this.btnMonitorFolder.Location = new System.Drawing.Point(464, 25);
+            this.btnMonitorFolder.Location = new System.Drawing.Point(464, 56);
             this.btnMonitorFolder.Name = "btnMonitorFolder";
             this.btnMonitorFolder.Size = new System.Drawing.Size(75, 23);
             this.btnMonitorFolder.TabIndex = 2;
@@ -79,7 +82,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(22, 51);
+            this.label2.Location = new System.Drawing.Point(22, 82);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(367, 15);
             this.label2.TabIndex = 3;
@@ -88,7 +91,7 @@
             // 
             // txtTargetFileName
             // 
-            this.txtTargetFileName.Location = new System.Drawing.Point(25, 67);
+            this.txtTargetFileName.Location = new System.Drawing.Point(25, 98);
             this.txtTargetFileName.Name = "txtTargetFileName";
             this.txtTargetFileName.Size = new System.Drawing.Size(375, 20);
             this.txtTargetFileName.TabIndex = 4;
@@ -98,7 +101,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(22, 90);
+            this.label3.Location = new System.Drawing.Point(22, 121);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(113, 15);
             this.label3.TabIndex = 5;
@@ -106,7 +109,7 @@
             // 
             // txtDestinationFolder
             // 
-            this.txtDestinationFolder.Location = new System.Drawing.Point(25, 106);
+            this.txtDestinationFolder.Location = new System.Drawing.Point(25, 137);
             this.txtDestinationFolder.Name = "txtDestinationFolder";
             this.txtDestinationFolder.Size = new System.Drawing.Size(433, 20);
             this.txtDestinationFolder.TabIndex = 6;
@@ -114,7 +117,7 @@
             // 
             // btnDestinationFolder
             // 
-            this.btnDestinationFolder.Location = new System.Drawing.Point(464, 103);
+            this.btnDestinationFolder.Location = new System.Drawing.Point(464, 134);
             this.btnDestinationFolder.Name = "btnDestinationFolder";
             this.btnDestinationFolder.Size = new System.Drawing.Size(75, 23);
             this.btnDestinationFolder.TabIndex = 7;
@@ -129,7 +132,7 @@
             this.btnStart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStart.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStart.Location = new System.Drawing.Point(25, 177);
+            this.btnStart.Location = new System.Drawing.Point(25, 208);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 8;
@@ -145,7 +148,7 @@
             this.btnStop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnStop.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.btnStop.Location = new System.Drawing.Point(121, 177);
+            this.btnStop.Location = new System.Drawing.Point(121, 208);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 9;
@@ -155,7 +158,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(220, 177);
+            this.btnClose.Location = new System.Drawing.Point(220, 208);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(75, 23);
             this.btnClose.TabIndex = 10;
@@ -165,7 +168,7 @@
             // 
             // btnChangeSetting
             // 
-            this.btnChangeSetting.Location = new System.Drawing.Point(25, 132);
+            this.btnChangeSetting.Location = new System.Drawing.Point(25, 163);
             this.btnChangeSetting.Name = "btnChangeSetting";
             this.btnChangeSetting.Size = new System.Drawing.Size(95, 23);
             this.btnChangeSetting.TabIndex = 11;
@@ -175,7 +178,7 @@
             // 
             // btnApply
             // 
-            this.btnApply.Location = new System.Drawing.Point(277, 132);
+            this.btnApply.Location = new System.Drawing.Point(277, 163);
             this.btnApply.Name = "btnApply";
             this.btnApply.Size = new System.Drawing.Size(75, 23);
             this.btnApply.TabIndex = 12;
@@ -185,7 +188,7 @@
             // 
             // btnCancelSetting
             // 
-            this.btnCancelSetting.Location = new System.Drawing.Point(358, 132);
+            this.btnCancelSetting.Location = new System.Drawing.Point(358, 163);
             this.btnCancelSetting.Name = "btnCancelSetting";
             this.btnCancelSetting.Size = new System.Drawing.Size(75, 23);
             this.btnCancelSetting.TabIndex = 13;
@@ -196,7 +199,7 @@
             // linkLog
             // 
             this.linkLog.AutoSize = true;
-            this.linkLog.Location = new System.Drawing.Point(392, 177);
+            this.linkLog.Location = new System.Drawing.Point(392, 208);
             this.linkLog.Name = "linkLog";
             this.linkLog.Size = new System.Drawing.Size(51, 13);
             this.linkLog.TabIndex = 14;
@@ -204,11 +207,31 @@
             this.linkLog.Text = "View Log";
             this.linkLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLog_LinkClicked);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(26, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 13);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Line  :";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
+            // 
+            // numericUpDownLine
+            // 
+            this.numericUpDownLine.Location = new System.Drawing.Point(68, 12);
+            this.numericUpDownLine.Name = "numericUpDownLine";
+            this.numericUpDownLine.Size = new System.Drawing.Size(43, 20);
+            this.numericUpDownLine.TabIndex = 16;
+            this.numericUpDownLine.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(558, 210);
+            this.ClientSize = new System.Drawing.Size(663, 289);
+            this.Controls.Add(this.numericUpDownLine);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.linkLog);
             this.Controls.Add(this.btnCancelSetting);
             this.Controls.Add(this.btnApply);
@@ -228,6 +251,7 @@
             this.Name = "Form1";
             this.Text = "Fetch&Upload Tool";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -250,6 +274,8 @@
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnCancelSetting;
         private System.Windows.Forms.LinkLabel linkLog;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numericUpDownLine;
     }
 }
 

@@ -14,6 +14,7 @@ public struct ToolSetting
     public string monitorFolderPath;
     public string targetFileName;
     public string destinateFolderPath;
+    public string line; //e.g. "L1"
 }
 
 namespace FetchUploadTool
@@ -24,7 +25,8 @@ namespace FetchUploadTool
         ToolSetting defaultSettings = new ToolSetting { 
             monitorFolderPath = "", 
             targetFileName = "", 
-            destinateFolderPath = "" 
+            destinateFolderPath = "",
+            line = "L0"
         };
         ToolSetting toolSetting = new ToolSetting();
         string binDataFilePath = "settings.bin";
@@ -60,14 +62,6 @@ namespace FetchUploadTool
                 }
             }
 
-
-
-
-
-            // show settings in text box
-            //Console.WriteLine($"MonitorFolderPath: {readSettings.monitorFolderPath}, TargetFileName: {readSettings.targetFileName}, DestinateFolderPath: {readSettings.destinateFolderPath}");
-            //message box
-            //MessageBox.Show($"MonitorFolderPath: {toolSetting.monitorFolderPath}, TargetFileName: {toolSetting.targetFileName}, DestinateFolderPath: {toolSetting.destinateFolderPath}");
         }
 
         private void btnMonitorFolder_Click(object sender, EventArgs e)
@@ -100,8 +94,12 @@ namespace FetchUploadTool
             txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
             txtTargetFileName.Text = toolSetting.targetFileName;
             txtDestinationFolder.Text = toolSetting.destinateFolderPath;
+            numericUpDownLine.Value = ExtractNumberFromLine(toolSetting.line);
             btnStop.Enabled = false;
             btnStop.BackColor = Color.Gray;
+
+            numericUpDownLine.Enabled = false;
+            numericUpDownLine.ReadOnly = true;
 
             txtBoxMonitorFolder.ReadOnly = true;
             txtBoxMonitorFolder.Enabled = false;
@@ -175,6 +173,7 @@ namespace FetchUploadTool
                 writer.Write(data.monitorFolderPath);
                 writer.Write(data.targetFileName);
                 writer.Write(data.destinateFolderPath);
+                writer.Write(data.line);
             }
         }
 
@@ -189,6 +188,7 @@ namespace FetchUploadTool
                 data.monitorFolderPath = reader.ReadString();
                 data.targetFileName = reader.ReadString();
                 data.destinateFolderPath = reader.ReadString();
+                data.line = reader.ReadString();
             }
 
             return data;
@@ -429,11 +429,15 @@ namespace FetchUploadTool
                             }
                         }
 
+                        // get model
+                        string model = FindAndExtract(file, "CTM|");
+
+                        MessageBox.Show(e.FullPath);
                         string fileName = Path.GetFileName(file);
                         // cut the "." and words after the "." of fileName
                         fileName = fileName.Substring(0, fileName.IndexOf("."));
 
-                        string newFileName = fileName + "_" + Path.GetFileName(e.FullPath) + ".txt";
+                        string newFileName = toolSetting.line+"_"+model+"_"+fileName + "_" + Path.GetFileName(e.FullPath) + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
                         File.Copy(file, newFilePath, true);
                         //Console.WriteLine($"New file created: {newFilePath}");
@@ -477,7 +481,7 @@ namespace FetchUploadTool
                         using (StreamWriter sw = new StreamWriter("Log.txt", true))
                         {
                             //sw.WriteLine($"Time: {log.actionTime}, Status: {log.status}, Year: {log.year}, Month: {log.month}, Day: {log.day}, Folder Name: {log.folderName}, File Name: {log.fileName}, File Path: {log.filePath}, File Size: {log.fileSize}, Destination Path: {log.destinationPath}, Destination Folder Name: {log.destinationFolderName}");
-                            sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", Status: " + log.status + ", Folder Name: " + log.folderName + ", File Name: " + log.fileName + ", File Path: " + log.filePath + ", File Size: " + log.fileSize +"(bytes)"+", Destination Path: " + log.destinationPath + ", Destination Folder Name: " + log.destinationFolderName);
+                            sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
                             //sw.WriteLine(" ");
                             //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
                         }
@@ -516,6 +520,9 @@ namespace FetchUploadTool
 
         private void btnChangeSetting_Click(object sender, EventArgs e)
         {
+            numericUpDownLine.Enabled = true;
+            numericUpDownLine.ReadOnly = false;
+
             txtBoxMonitorFolder.ReadOnly = false;
             txtBoxMonitorFolder.Enabled = true;
             btnMonitorFolder.Enabled = true;
@@ -558,11 +565,17 @@ namespace FetchUploadTool
                 MessageBox.Show("Please enter a valid Target file name!");
                 return;
             }
+            else if (numericUpDownLine.Value <= 0)
+            {
+                MessageBox.Show("Please enter a valid Line number!");
+                return;
+            }
             else
             {
                 toolSetting.monitorFolderPath = txtBoxMonitorFolder.Text;
                 toolSetting.targetFileName = txtTargetFileName.Text;
                 toolSetting.destinateFolderPath = txtDestinationFolder.Text;
+                toolSetting.line = "L" + numericUpDownLine.Value.ToString();
                 initializaion = true;
 
 
@@ -571,7 +584,10 @@ namespace FetchUploadTool
 
             WriteStructToBinaryFile(binDataFilePath, toolSetting);
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
-            
+
+            numericUpDownLine.ReadOnly = true;
+            numericUpDownLine.Enabled = false;
+
             txtBoxMonitorFolder.ReadOnly = true;
             txtBoxMonitorFolder.Enabled = false;
             btnMonitorFolder.Enabled = false;
@@ -607,6 +623,7 @@ namespace FetchUploadTool
                 sw.WriteLine("Monitor Folder Path: " + toolSetting.monitorFolderPath);
                 sw.WriteLine("Target File Name: " + toolSetting.targetFileName);
                 sw.WriteLine("Destination Folder Path: " + toolSetting.destinateFolderPath);
+                sw.WriteLine("Line Number: " + toolSetting.line);
                 sw.WriteLine(" ");
                 //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
             }
@@ -623,6 +640,9 @@ namespace FetchUploadTool
         private void btnCancelSetting_Click(object sender, EventArgs e)
         {
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+
+            numericUpDownLine.ReadOnly = true;
+            numericUpDownLine.Enabled = false;
 
             txtBoxMonitorFolder.ReadOnly = true;
             txtBoxMonitorFolder.Enabled = false;
@@ -643,6 +663,7 @@ namespace FetchUploadTool
             txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
             txtTargetFileName.Text = toolSetting.targetFileName;
             txtDestinationFolder.Text = toolSetting.destinateFolderPath;
+            numericUpDownLine.Value = ExtractNumberFromLine(toolSetting.line);
             if(initializaion == false)
             {
                 btnStart.Enabled = false;
@@ -750,7 +771,56 @@ namespace FetchUploadTool
             }
         }
 
-        
+
+        static int ExtractNumberFromLine(string line)
+        {
+            // 从第2个字符开始（索引为1），截取到字符串的末尾
+            string numberStr = line.Substring(1);
+
+            // 将截取的数字部分转换为整数
+            if (int.TryParse(numberStr, out int extractedNumber))
+            {
+                return extractedNumber;
+            }
+            return -1;
+        }
+
+        static string FindAndExtract(string filePath, string keyword)
+        {
+            try
+            {
+                // 读取文件的所有行
+                string[] lines = File.ReadAllLines(filePath);
+
+                // 遍历每一行寻找关键字
+                foreach (string currentLine in lines)
+                {
+                    int startIndex = currentLine.IndexOf(keyword);
+                    if (startIndex != -1)
+                    {
+                        // 找到关键字后，截取关键字后面到逗号前面的部分
+                        int commaIndex = currentLine.IndexOf(",", startIndex);
+                        if (commaIndex != -1)
+                        {
+                            return currentLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                        }
+                    }
+                }
+
+                Console.WriteLine("未找到匹配项。");
+                return string.Empty; // 或者可以抛出异常或采取其他适当的处理方式
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("发生异常: " + ex.Message);
+                return string.Empty; // 或者可以抛出异常或采取其他适当的处理方式
+            }
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
