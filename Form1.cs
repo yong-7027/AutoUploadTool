@@ -469,6 +469,8 @@ namespace FetchUploadTool
                         string newFileName = toolSetting.line+"_"+model + "_" + Path.GetFileName(e.FullPath) + "_" + fileName + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
                         File.Copy(file, newFilePath, true);
+                        
+
                         //Console.WriteLine($"New file created: {newFilePath}");
 
                         // log section
@@ -484,7 +486,17 @@ namespace FetchUploadTool
                         log.day = DateTime.Now.ToString("dd");
                         log.fileName = newFileName;
                         log.filePath = e.FullPath;
-                        log.status = "Successful";
+                        //log.status = "Successful";
+                        //if new file is sucessfully copy to destination status is "Successful",else status is failed
+                        if (File.Exists(newFilePath))
+                        {
+                            log.status = "Successful";
+                        }
+                        else
+                        {
+                            log.status = "Failed";
+                        }
+
                         log.folderName = Path.GetFileName(e.FullPath);
                         FileInfo fileInfo1 = new FileInfo(file);
                         log.fileSize = fileInfo1.Length;

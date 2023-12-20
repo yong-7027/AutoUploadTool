@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchUploadTool", "FetchUploadTool.csproj", "{B148E3A1-D00B-4441-84EE-EA2214AF0510}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FetchUploadTool_Installer", "..\FetchUploadTool_Installer\FetchUploadTool_Installer.vdproj", "{AC4F1216-9974-4EDB-AF70-030056671551}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{B148E3A1-D00B-4441-84EE-EA2214AF0510}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B148E3A1-D00B-4441-84EE-EA2214AF0510}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B148E3A1-D00B-4441-84EE-EA2214AF0510}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC4F1216-9974-4EDB-AF70-030056671551}.Debug|Any CPU.ActiveCfg = Debug
+		{AC4F1216-9974-4EDB-AF70-030056671551}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
