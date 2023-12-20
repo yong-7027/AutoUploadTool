@@ -150,6 +150,11 @@ namespace FetchUploadTool
             btnStop.Enabled = false;
             btnStop.BackColor = Color.Gray;
 
+            linkPlantListFile.Enabled=false;
+            //keep the link underlined
+            
+            
+            
 
             btnLogPath.Enabled = false;
             
@@ -437,8 +442,8 @@ namespace FetchUploadTool
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
                         System.IO.File.Copy(file, newFilePath, true);
                         Console.WriteLine($"New file created: {newFilePath}");
-                    }
                 }
+                    }
             }
         }
         */
@@ -475,12 +480,26 @@ namespace FetchUploadTool
                             {
                                 //await Task.Delay(1);
                                 fileInfo.Refresh();
+                                //if time is more than 10s, break the loop
+
+
+
                             }
                         }
 
-                        // get model
-                        string model = FindAndExtract(file, "CTM|");
 
+                        // get model
+                        FileInfo fileInfo1 = new FileInfo(file);
+                        string model = "";
+                        if (fileInfo1.Length != 0)
+                        {
+                            //MessageBox.Show(fileInfo1.Length.ToString());
+                            model = FindAndExtract(file, "CTM|");
+                        }
+                        else
+                        {
+                            model = "EmptyData";
+                        }
                         //MessageBox.Show(e.FullPath);
                         string fileName = Path.GetFileName(file);
                         // cut the "." and words after the "." of fileName
@@ -563,7 +582,7 @@ namespace FetchUploadTool
                         }
 
                         log.folderName = Path.GetFileName(e.FullPath);
-                        FileInfo fileInfo1 = new FileInfo(file);
+                        
                         log.fileSize = fileInfo1.Length;
                         log.destinationPath = newFilePath;
                         log.destinationFolderName= Path.GetFileName(toolSetting.destinateFolderPath);
@@ -615,6 +634,7 @@ namespace FetchUploadTool
        */
         private void btnChangeSetting_Click(object sender, EventArgs e)
         {
+            linkPlantListFile.Enabled = true;
             btnLogPath.Enabled = true;
 
             numericUpDownLine.Enabled = true;
@@ -730,7 +750,7 @@ namespace FetchUploadTool
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
 
             btnLogPath.Enabled = false;
-            
+            linkPlantListFile.Enabled = false;
 
             numericUpDownLine.ReadOnly = true;
             numericUpDownLine.Enabled = false;
@@ -769,7 +789,8 @@ namespace FetchUploadTool
         private void btnCancelSetting_Click(object sender, EventArgs e)
         {
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
-
+            linkPlantListFile.Enabled = false;
+            
             btnLogPath.Enabled = false;
             numericUpDownLine.ReadOnly = true;
             numericUpDownLine.Enabled = false;
@@ -954,12 +975,12 @@ namespace FetchUploadTool
                 }
 
                 
-                return string.Empty; // 
+                return "ModelNotFound"; // 
             }
             catch (Exception ex)
             {
                
-                return string.Empty; // 
+                return "Empty"; // 
             }
         }
 
@@ -1090,6 +1111,21 @@ namespace FetchUploadTool
             //Console.WriteLine($"快捷方式已创建：{shortcutPath}");
         }
 
+        private void linkPlantListFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string filePath = "PlantList.txt";
+
+            try
+            {
+                // 使用 Process.Start 打开文件
+                Process.Start(filePath);
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("发生错误: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("File not found!");
+            }
+        }
     }
 }
 

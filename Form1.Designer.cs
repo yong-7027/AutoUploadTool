@@ -48,6 +48,7 @@
             this.txtLogPath = new System.Windows.Forms.Label();
             this.btnLogPath = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.linkPlantListFile = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).BeginInit();
             this.SuspendLayout();
             // 
@@ -248,11 +249,24 @@
             this.label5.TabIndex = 19;
             this.label5.Text = "Log File Location:";
             // 
+            // linkPlantListFile
+            // 
+            this.linkPlantListFile.AutoSize = true;
+            this.linkPlantListFile.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
+            this.linkPlantListFile.Location = new System.Drawing.Point(424, 18);
+            this.linkPlantListFile.Name = "linkPlantListFile";
+            this.linkPlantListFile.Size = new System.Drawing.Size(115, 13);
+            this.linkPlantListFile.TabIndex = 20;
+            this.linkPlantListFile.TabStop = true;
+            this.linkPlantListFile.Text = "Set Plant List (optional)";
+            this.linkPlantListFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkPlantListFile_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 282);
+            this.Controls.Add(this.linkPlantListFile);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnLogPath);
             this.Controls.Add(this.txtLogPath);
@@ -303,6 +317,7 @@
         private System.Windows.Forms.Label txtLogPath;
         private System.Windows.Forms.Button btnLogPath;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.LinkLabel linkPlantListFile;
     }
 }
 
