@@ -487,8 +487,53 @@ namespace FetchUploadTool
                         fileName = fileName.Substring(0, fileName.IndexOf("."));
 
                         string newFileName = toolSetting.line+"_"+model + "_" + Path.GetFileName(e.FullPath) + ".txt";
-                        string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
-                        System.IO.File.Copy(file, newFilePath, true);
+
+                        //////////////////////////////
+                        ///
+                        string plantFilePath = "PlantList.txt";  // 替换为你的文本文件路径
+                        string newFilePath="";
+                        // 检查Plants文件是否存在
+                        if (System.IO.File.Exists(plantFilePath))
+                        {
+                            // 读取每一行
+                            string[] plants = System.IO.File.ReadAllLines(plantFilePath);
+                            
+                            string newFolderPath;
+                            Boolean plantExist = false;
+                            foreach (string plant in plants)
+                            {
+                                if (model.Contains(plant))
+                                {
+                                    //create new folder in destination folder
+                                    newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
+                                    if (!Directory.Exists(newFolderPath))
+                                    {
+                                        Directory.CreateDirectory(newFolderPath);
+                                    }
+                                    // new file path
+                                    newFilePath = newFolderPath + @"\" + newFileName;
+                                    System.IO.File.Copy(file, newFilePath, true);
+                                    plantExist = true;
+                                    break;
+                                }  
+                            }
+                            if(plantExist == false)
+                            {
+                                //newFolderPath = toolSetting.destinateFolderPath + @"\other";
+                                //newFilePath = newFolderPath + @"\" + newFileName;
+                                newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                System.IO.File.Copy(file, newFilePath, true);
+                            }
+                            
+                            
+                        }
+                        else
+                        {
+                            newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                            System.IO.File.Copy(file, newFilePath, true);
+                        }
+
+                       
                         
 
                         //Console.WriteLine($"New file created: {newFilePath}");
