@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using Microsoft.Win32;
+using IWshRuntimeLibrary;
 
 public struct ToolSetting
 {
@@ -66,7 +67,7 @@ namespace FetchUploadTool
             this.FormClosing += MainForm_FormClosing;
             InitializeTrayIcon();
             // check if the binary file exist, if not, create one
-            if (!File.Exists(binDataFilePath))
+            if (!System.IO.File.Exists(binDataFilePath))
             {
                 // write default settings to binary file
                 WriteStructToBinaryFile(binDataFilePath, defaultSettings);
@@ -75,7 +76,7 @@ namespace FetchUploadTool
             // read settings from binary file
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
             /*
-            if (!File.Exists("Log.bin"))
+            if (!System.IO.File.Exists("Log.bin"))
             {
                 using (FileStream fs = new FileStream("Log.bin", FileMode.Create, FileAccess.Write))
                 {
@@ -85,6 +86,15 @@ namespace FetchUploadTool
             */
 
             //InitializeTrayIcon();
+
+
+            string appName = "FetchUploadTool";  // 替换为你的应用程序名称
+            string executablePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUploadTool.exe";  // 获取应用程序的可执行文件路径
+
+            string startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+            string shortcutPath = Path.Combine(startupFolderPath, $"{appName}.lnk");
+
+            CreateShortcut(shortcutPath, executablePath);
         }
 
         private void btnMonitorFolder_Click(object sender, EventArgs e)
@@ -116,7 +126,7 @@ namespace FetchUploadTool
             //MessageBox.Show(toolSetting.LogFilePath);
             //string content = reader.ReadToEnd();
             //txtBoxMonitorFolder.Text = content;
-            if (!File.Exists(toolSetting.LogFilePath))
+            if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
                 using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -183,7 +193,7 @@ namespace FetchUploadTool
 
             // read loglist
             /*
-            if (!File.Exists("Log.bin"))
+            if (!System.IO.File.Exists("Log.bin"))
             {
                 using (FileStream fs = new FileStream("Log.bin", FileMode.Create, FileAccess.Write))
                 {
@@ -204,7 +214,7 @@ namespace FetchUploadTool
         // write the whole struct to binary file
         static void WriteStructToBinaryFile(string filePath, ToolSetting data)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
+            using (BinaryWriter writer = new BinaryWriter(System.IO.File.Open(filePath, FileMode.Create)))
             {
                 // write the whole struct to binary file
                 writer.Write(data.monitorFolderPath);
@@ -220,7 +230,7 @@ namespace FetchUploadTool
         {
             ToolSetting data = new ToolSetting();
 
-            using (BinaryReader reader = new BinaryReader(File.Open(filePath, FileMode.Open)))
+            using (BinaryReader reader = new BinaryReader(System.IO.File.Open(filePath, FileMode.Open)))
             {
                 // read the whole struct from binary file
                 data.monitorFolderPath = reader.ReadString();
@@ -297,7 +307,7 @@ namespace FetchUploadTool
             btnChangeSetting.Enabled = false;
 
 
-            if (!File.Exists(toolSetting.LogFilePath))
+            if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
                 using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -328,7 +338,7 @@ namespace FetchUploadTool
                
             }
             btnChangeSetting.Enabled = true;
-            if (!File.Exists(toolSetting.LogFilePath))
+            if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
                 using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -381,7 +391,7 @@ namespace FetchUploadTool
                         //Console.WriteLine(file);
                         string newFileName = fileName + "_" + folderName + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\"  + newFileName;
-                        File.Copy(file, newFilePath,true);
+                        System.IO.File.Copy(file, newFilePath,true);
                         Console.WriteLine($"New file created: {newFilePath}");
                     }
                 }
@@ -425,7 +435,7 @@ namespace FetchUploadTool
 
                         string newFileName = fileName + "_" + folderName + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
-                        File.Copy(file, newFilePath, true);
+                        System.IO.File.Copy(file, newFilePath, true);
                         Console.WriteLine($"New file created: {newFilePath}");
                     }
                 }
@@ -478,7 +488,7 @@ namespace FetchUploadTool
 
                         string newFileName = toolSetting.line+"_"+model + "_" + Path.GetFileName(e.FullPath) + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
-                        File.Copy(file, newFilePath, true);
+                        System.IO.File.Copy(file, newFilePath, true);
                         
 
                         //Console.WriteLine($"New file created: {newFilePath}");
@@ -498,7 +508,7 @@ namespace FetchUploadTool
                         log.filePath = e.FullPath;
                         //log.status = "Successful";
                         //if new file is sucessfully copy to destination status is "Successful",else status is failed
-                        if (File.Exists(newFilePath))
+                        if (System.IO.File.Exists(newFilePath))
                         {
                             log.status = "Successful";
                         }
@@ -521,7 +531,7 @@ namespace FetchUploadTool
 
                         // create a txt file to record the log
                         // create text file if not exist
-                        if (!File.Exists(toolSetting.LogFilePath))
+                        if (!System.IO.File.Exists(toolSetting.LogFilePath))
                         {
                             using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                             {
@@ -621,7 +631,7 @@ namespace FetchUploadTool
             {
 
 
-                if (!File.Exists(toolSetting.LogFilePath))
+                if (!System.IO.File.Exists(toolSetting.LogFilePath))
                 {
                     using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                     {
@@ -652,7 +662,7 @@ namespace FetchUploadTool
                 // if log file path changed, copy the old log file to new path
                 if(toolSetting.LogFilePath != txtLogPath.Text)
                 {
-                    File.Copy(toolSetting.LogFilePath, txtLogPath.Text, true);
+                    System.IO.File.Copy(toolSetting.LogFilePath, txtLogPath.Text, true);
                 }
                 
 
@@ -779,7 +789,7 @@ namespace FetchUploadTool
         /*
         static void WriteLogToBinaryFile(string filePath, List<LogInfo> data)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(filePath, FileMode.Create)))
+            using (BinaryWriter writer = new BinaryWriter(System.IO.File.Open(filePath, FileMode.Create)))
             {
                 foreach (var log in data)
                 {
@@ -804,7 +814,7 @@ namespace FetchUploadTool
         {
             List<LogInfo> data = new List<LogInfo>();
 
-            using (BinaryReader reader = new BinaryReader(File.Open(filePath, FileMode.Open)))
+            using (BinaryReader reader = new BinaryReader(System.IO.File.Open(filePath, FileMode.Open)))
             {
                 // read
                 while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -845,7 +855,7 @@ namespace FetchUploadTool
             /*
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (!File.Exists(toolSetting.LogFilePath))
+                if (!System.IO.File.Exists(toolSetting.LogFilePath))
                 {
                     using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                     {
@@ -881,7 +891,7 @@ namespace FetchUploadTool
             try
             {
                 // read all lines from file
-                string[] lines = File.ReadAllLines(filePath);
+                string[] lines = System.IO.File.ReadAllLines(filePath);
 
                 // search keyword in each line
                 foreach (string currentLine in lines)
@@ -983,7 +993,7 @@ namespace FetchUploadTool
         {
             // 关闭应用程序
             notifyIcon.Visible = false;
-            if (!File.Exists(toolSetting.LogFilePath))
+            if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
                 using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -1001,7 +1011,7 @@ namespace FetchUploadTool
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
             // 在这里添加处理系统关机事件的代码
-            if (!File.Exists(toolSetting.LogFilePath))
+            if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
                 using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
                 {
@@ -1016,7 +1026,24 @@ namespace FetchUploadTool
             }
         }
 
+        static void CreateShortcut(string shortcutPath, string targetPath)
+        {
+            // 创建 WshShell 对象
+            WshShell shell = new WshShell();
 
+            // 创建快捷方式对象
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+
+            // 设置快捷方式属性
+            shortcut.TargetPath = targetPath;
+            shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
+            shortcut.Description = $"{Path.GetFileNameWithoutExtension(targetPath)} Shortcut";
+            shortcut.IconLocation = targetPath;  // 使用应用程序图标
+
+            // 保存快捷方式
+            shortcut.Save();
+            //Console.WriteLine($"快捷方式已创建：{shortcutPath}");
+        }
 
     }
 }
