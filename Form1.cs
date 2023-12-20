@@ -152,9 +152,11 @@ namespace FetchUploadTool
             }
             else
             {
+                
                 btnStart.Enabled = true;
                 btnStart.BackColor = Color.Green;
                 initializaion = true;
+                btnStart.PerformClick();
             }
             btnApply.Hide();
             btnCancelSetting.Hide();
@@ -656,12 +658,16 @@ namespace FetchUploadTool
                 toolSetting.LogFilePath = txtLogPath.Text;
                 initializaion = true;
 
+                btnStart.PerformClick();
 
             }
 
 
             WriteStructToBinaryFile(binDataFilePath, toolSetting);
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+
+            btnLogPath.Enabled = false;
+            
 
             numericUpDownLine.ReadOnly = true;
             numericUpDownLine.Enabled = false;
@@ -684,6 +690,7 @@ namespace FetchUploadTool
 
             btnCancelSetting.Hide();
             btnApply.Hide();
+            btnStart.PerformClick();
 
             
 
@@ -700,6 +707,7 @@ namespace FetchUploadTool
         {
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
 
+            btnLogPath.Enabled = false;
             numericUpDownLine.ReadOnly = true;
             numericUpDownLine.Enabled = false;
 
@@ -737,6 +745,10 @@ namespace FetchUploadTool
 
             btnCancelSetting.Hide();
             btnApply.Hide();
+            if(initializaion == true)
+            {
+                btnStart.PerformClick();
+            }
 
         }
 
