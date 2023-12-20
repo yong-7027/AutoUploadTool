@@ -466,7 +466,7 @@ namespace FetchUploadTool
                         // cut the "." and words after the "." of fileName
                         fileName = fileName.Substring(0, fileName.IndexOf("."));
 
-                        string newFileName = toolSetting.line+"_"+model + "_" + Path.GetFileName(e.FullPath) + "_" + fileName + ".txt";
+                        string newFileName = toolSetting.line+"_"+model + "_" + Path.GetFileName(e.FullPath) + ".txt";
                         string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
                         File.Copy(file, newFilePath, true);
                         
