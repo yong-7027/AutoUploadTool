@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
+using Microsoft.Win32;
 
 public struct ToolSetting
 {
@@ -38,6 +40,7 @@ namespace FetchUploadTool
     
     public partial class Form1 : Form
     {
+        private NotifyIcon notifyIcon;
         ToolSetting defaultSettings = new ToolSetting {
             monitorFolderPath = "",
             targetFileName = "",
@@ -61,14 +64,14 @@ namespace FetchUploadTool
         { 
             InitializeComponent();
             this.FormClosing += MainForm_FormClosing;
-
+            InitializeTrayIcon();
             // check if the binary file exist, if not, create one
             if (!File.Exists(binDataFilePath))
             {
                 // write default settings to binary file
                 WriteStructToBinaryFile(binDataFilePath, defaultSettings);
             }
-
+            SystemEvents.SessionEnding += SystemEvents_SessionEnding;
             // read settings from binary file
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
             /*
@@ -80,8 +83,8 @@ namespace FetchUploadTool
                 }
             }
             */
-            
 
+            //InitializeTrayIcon();
         }
 
         private void btnMonitorFolder_Click(object sender, EventArgs e)
@@ -108,11 +111,27 @@ namespace FetchUploadTool
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+            WindowState = FormWindowState.Minimized;
             CenterToScreen();
             //MessageBox.Show(toolSetting.LogFilePath);
             //string content = reader.ReadToEnd();
             //txtBoxMonitorFolder.Text = content;
+            if (!File.Exists(toolSetting.LogFilePath))
+            {
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+            {
+                sw.WriteLine(" ");
+                sw.WriteLine("App open  time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+            }
+
+
+
             txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
             txtTargetFileName.Text = toolSetting.targetFileName;
             txtDestinationFolder.Text = toolSetting.destinateFolderPath;
@@ -176,19 +195,8 @@ namespace FetchUploadTool
 
             // create a txt file to record the log
             // create text file if not exist
-            if (!File.Exists(toolSetting.LogFilePath))
-            {
-                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
-                {
-                    // 
-                }
-            }
-            // write log to txt file
-            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
-            {
-                sw.WriteLine(" ");
-                sw.WriteLine("App open  time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
-            }
+           
+            
 
         }
         
@@ -537,7 +545,7 @@ namespace FetchUploadTool
         }
 
 
-
+       /*
         private void btnClose_Click(object sender, EventArgs e)
         {
             // stop monitoring
@@ -549,7 +557,7 @@ namespace FetchUploadTool
             
             this.Close();
         }
-
+       */
         private void btnChangeSetting_Click(object sender, EventArgs e)
         {
             btnLogPath.Enabled = true;
@@ -826,7 +834,15 @@ namespace FetchUploadTool
         */
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
+
+            // 当用户点击主窗体关闭按钮时，只隐藏而不关闭
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                ToggleMainWindow();
+            }
+
+            /*
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 if (!File.Exists(toolSetting.LogFilePath))
@@ -843,6 +859,7 @@ namespace FetchUploadTool
                     sw.WriteLine(" ");
                 }
             }
+            */
         }
 
 
@@ -926,6 +943,81 @@ namespace FetchUploadTool
         {
 
         }
+
+        private void InitializeTrayIcon()
+        {
+            // 创建系统托盘图标
+            notifyIcon = new NotifyIcon();
+            notifyIcon.Icon = new Icon("icon.ico"); // 替换为你的图标文件路径
+            notifyIcon.Text = "FetchUpload"; // 替换为你的应用程序名称
+            notifyIcon.Visible = true;
+
+
+            // 添加双击事件处理程序，用于显示/隐藏主窗体
+            notifyIcon.DoubleClick += (sender, e) => ToggleMainWindow();
+
+            // 创建右键菜单
+            ContextMenu contextMenu = new ContextMenu();
+            contextMenu.MenuItems.Add("Exit", (sender, e) => ExitApplication());
+
+            // 将右键菜单分配给系统托盘图标
+            notifyIcon.ContextMenu = contextMenu;
+        }
+
+        private void ToggleMainWindow()
+        {
+            // 显示/隐藏主窗体
+            if (WindowState == FormWindowState.Minimized)
+            {
+                Show();
+                WindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                Hide();
+                WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        private void ExitApplication()
+        {
+            // 关闭应用程序
+            notifyIcon.Visible = false;
+            if (!File.Exists(toolSetting.LogFilePath))
+            {
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+            {
+                sw.WriteLine("App Close time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                sw.WriteLine(" ");
+            }
+            Application.Exit();
+        }
+        private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
+        {
+            // 在这里添加处理系统关机事件的代码
+            if (!File.Exists(toolSetting.LogFilePath))
+            {
+                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                {
+                    // 
+                }
+            }
+            // write log to txt file
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+            {
+                sw.WriteLine("App Close time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
+                sw.WriteLine(" ");
+            }
+        }
+
+
+
     }
 }
 

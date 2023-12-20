@@ -39,7 +39,6 @@
             this.btnDestinationFolder = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
-            this.btnClose = new System.Windows.Forms.Button();
             this.btnChangeSetting = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancelSetting = new System.Windows.Forms.Button();
@@ -159,16 +158,6 @@
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // btnClose
-            // 
-            this.btnClose.Location = new System.Drawing.Point(224, 235);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(75, 23);
-            this.btnClose.TabIndex = 10;
-            this.btnClose.Text = "Close";
-            this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-            // 
             // btnChangeSetting
             // 
             this.btnChangeSetting.Location = new System.Drawing.Point(25, 203);
@@ -273,7 +262,6 @@
             this.Controls.Add(this.btnCancelSetting);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnChangeSetting);
-            this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnDestinationFolder);
@@ -306,7 +294,6 @@
         private System.Windows.Forms.Button btnDestinationFolder;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnChangeSetting;
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnCancelSetting;
