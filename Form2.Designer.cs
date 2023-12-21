@@ -1,4 +1,4 @@
-﻿namespace FetchUploadTool
+﻿namespace SMTUploadTool
 {
     partial class Form2
     {

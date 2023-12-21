@@ -38,7 +38,7 @@ struct LogInfo
     public string destinationFolderName;
 }
 
-namespace FetchUploadTool
+namespace SMTUploadTool
 {
     
     public partial class Form1 : Form
@@ -90,8 +90,8 @@ namespace FetchUploadTool
             //InitializeTrayIcon();
 
 
-            string appName = "FetchUploadTool";  // 替换为你的应用程序名称
-            string executablePath = AppDomain.CurrentDomain.BaseDirectory + "AutoUploadTool.exe";  // 获取应用程序的可执行文件路径
+            string appName = "SMTUploadTool";  // 替换为你的应用程序名称
+            string executablePath = AppDomain.CurrentDomain.BaseDirectory + "SMTUploadTool.exe";  // 获取应用程序的可执行文件路径
 
             string startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             string shortcutPath = Path.Combine(startupFolderPath, $"{appName}.lnk");
@@ -1069,7 +1069,7 @@ namespace FetchUploadTool
             // 创建系统托盘图标
             notifyIcon = new NotifyIcon();
             notifyIcon.Icon = new Icon("icon.ico"); // 替换为你的图标文件路径
-            notifyIcon.Text = "FetchUpload"; // 替换为你的应用程序名称
+            notifyIcon.Text = "SMTUpload"; // 替换为你的应用程序名称
             notifyIcon.Visible = true;
 
 

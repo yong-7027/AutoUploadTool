@@ -1,4 +1,4 @@
-﻿namespace FetchUploadTool
+﻿namespace SMTUploadTool
 {
     partial class Form1
     {
@@ -288,7 +288,7 @@
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Fetch&Upload Tool";
+            this.Text = "SMT Upload Tool";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).EndInit();
             this.ResumeLayout(false);

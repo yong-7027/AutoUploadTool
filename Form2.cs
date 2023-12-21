@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 
 
-namespace FetchUploadTool
+namespace SMTUploadTool
 {
     public partial class Form2 : Form
     {
