@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using Microsoft.Win32;
 using IWshRuntimeLibrary;
+using System.Reflection;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 public struct ToolSetting
 {
@@ -455,7 +457,26 @@ namespace FetchUploadTool
 
             if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Renamed)
             {
-                
+                // write log to txt file
+                if (!System.IO.File.Exists(toolSetting.LogFilePath))
+                {
+                    using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                    {
+                        // 
+                    }
+                }
+                // write log to txt file
+                using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                {
+                    //get the time
+                    //sw.WriteLine("  Action>> Date : " + DateTime.Now.ToString("yyyy/MM/dd") + ", Time: " + DateTime.Now.ToString("HH:mm:ss") + ", Action: " + e.ChangeType + ", Folder Name: " + Path.GetFileName(e.FullPath) + ", Folder Path: " + e.FullPath);
+
+
+                    sw.WriteLine("("+ DateTime.Now.ToString("yyyy/MM/dd HH: mm:ss")+")Checking Folder <"+ Path.GetFileName(e.FullPath)+">...");
+                    //sw.WriteLine(" ");
+                    //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                }
+
 
                 // loop until the folder is the target file
                 while (!Directory.GetFiles(e.FullPath).Any(file =>
@@ -476,11 +497,34 @@ namespace FetchUploadTool
                         FileInfo fileInfo = new FileInfo(file);
                         if(fileInfo.Length == 0)
                         {
+                                
+                            
                             while (fileInfo.Length == 0)
                             {
                                 //await Task.Delay(1);
                                 fileInfo.Refresh();
                                 //if time is more than 10s, break the loop
+                                if ((DateTime.Now - fileInfo.LastWriteTime).TotalSeconds > 10)
+                                {
+                                    // write log to txt file
+                                    if (!System.IO.File.Exists(toolSetting.LogFilePath))
+                                    {
+                                        using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                                        {
+                                            // 
+                                        }
+                                    }
+                                    // write log to txt file
+                                    using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                                    {
+                                        // record the file content is empty,and time 
+
+                                        sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")File \"" + Path.GetFileName(file) + "\" is empty, please check the file!");
+
+                                        
+                                    }
+                                    break;
+                                }
 
 
 
@@ -509,12 +553,12 @@ namespace FetchUploadTool
 
                         //////////////////////////////
                         ///
-                        string plantFilePath = "PlantList.txt";  // 替换为你的文本文件路径
+                        string plantFilePath = "PlantList.txt";  //
                         string newFilePath="";
-                        // 检查Plants文件是否存在
+                        // check if the Plantslist file exist
                         if (System.IO.File.Exists(plantFilePath))
-                        {
-                            // 读取每一行
+                        { 
+                            // read line by line
                             string[] plants = System.IO.File.ReadAllLines(plantFilePath);
                             
                             string newFolderPath;
@@ -606,8 +650,8 @@ namespace FetchUploadTool
                         using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                         {
                             //sw.WriteLine($"Time: {log.actionTime}, Status: {log.status}, Year: {log.year}, Month: {log.month}, Day: {log.day}, Folder Name: {log.folderName}, File Name: {log.fileName}, File Path: {log.filePath}, File Size: {log.fileSize}, Destination Path: {log.destinationPath}, Destination Folder Name: {log.destinationFolderName}");
-                            sw.WriteLine("Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
-                            //sw.WriteLine(" ");
+                            sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
+                            sw.WriteLine(" ");
                             //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
                         }
 
