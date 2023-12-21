@@ -1170,6 +1170,42 @@ namespace FetchUploadTool
                 MessageBox.Show("File not found!");
             }
         }
+
+
+
+        static bool IsProgramRegistered(string keyName, string assemblyPath)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+            {
+                return key.GetValue(keyName) != null && key.GetValue(keyName).ToString() == assemblyPath;
+            }
+        }
+
+        static void RegisterProgram(string keyName, string valueName, string assemblyPath)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+            {
+                key.SetValue(keyName, assemblyPath);
+            }
+        }
+
+        static void RunAsAdmin(string assemblyPath)
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = assemblyPath,
+                Verb = "runas" // "runas"表示以管理员身份运行
+            };
+
+            try
+            {
+                Process.Start(startInfo);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // 用户取消了UAC提示
+            }
+        }
     }
 }
 
