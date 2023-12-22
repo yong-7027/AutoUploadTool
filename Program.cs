@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,33 +15,42 @@ namespace SMTUploadTool
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
+        static Mutex mutex = new Mutex(true, "{E1CB36E2-41A5-4E35-9ED2-3D96DE7D9CB7}");
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            //if (mutex.WaitOne(TimeSpan.Zero, true))
+            //{
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            // 获取程序路径
-            string assemblyPath = Assembly.GetExecutingAssembly().Location;
+                // 获取程序路径
+                string assemblyPath = Assembly.GetExecutingAssembly().Location;
 
-            // 设置注册表项的键名
-            const string keyName = "SMTUploadTool";
+                // 设置注册表项的键名
+                const string keyName = "SMTUploadTool";
 
-            // 设置注册表项的值名
-            const string valueName = "SMTUploadToolPath";
+                // 设置注册表项的值名
+                const string valueName = "SMTUploadToolPath";
 
-            // 判断是否已经添加到注册表中
-            if (!IsProgramRegistered(keyName, assemblyPath))
-            {
-                // 添加到注册表中
-                RegisterProgram(keyName, valueName, assemblyPath);
-                RunAsAdmin(assemblyPath);
-            }
+                // 判断是否已经添加到注册表中
+                if (!IsProgramRegistered(keyName, assemblyPath))
+                {
+                    // 添加到注册表中
+                    RegisterProgram(keyName, valueName, assemblyPath);
+                    RunAsAdmin(assemblyPath);
+                }
+                else
+                {
+                    Application.Run(new Form1());
+                }
 
-            // 确保以管理员身份运行程序
-            
+                // 确保以管理员身份运行程序
 
-            Application.Run(new Form1());
+
+                
+           // }
         }
 
         static bool IsProgramRegistered(string keyName, string assemblyPath)
