@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing;
 using Microsoft.Win32;
 using IWshRuntimeLibrary;
-using System.Reflection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 public struct ToolSetting
 {
@@ -40,7 +33,7 @@ struct LogInfo
 
 namespace SMTUploadTool
 {
-    
+
     public partial class Form1 : Form
     {
         private NotifyIcon notifyIcon;
@@ -97,6 +90,8 @@ namespace SMTUploadTool
             string shortcutPath = Path.Combine(startupFolderPath, $"{appName}.lnk");
 
             CreateShortcut(shortcutPath, executablePath);
+            // clean the memory
+            //GC.Collect();
         }
 
         private void btnMonitorFolder_Click(object sender, EventArgs e)
@@ -118,6 +113,7 @@ namespace SMTUploadTool
                     
                     txtBoxMonitorFolder.Text=folderBrowserDialog.SelectedPath;
                 }
+               
             }
         }
 
@@ -125,6 +121,7 @@ namespace SMTUploadTool
         {
             WindowState = FormWindowState.Minimized;
             CenterToScreen();
+            
             //MessageBox.Show(toolSetting.LogFilePath);
             //string content = reader.ReadToEnd();
             //txtBoxMonitorFolder.Text = content;
@@ -300,7 +297,7 @@ namespace SMTUploadTool
 
             // event handlers when a new folder is created
             watcher.Created += OnFolderCreated;
-
+            
             // start to monitor
             watcher.EnableRaisingEvents = true;
 
@@ -465,6 +462,8 @@ namespace SMTUploadTool
                         // 
                     }
                 }
+                //sleep 0.5s
+                //await Task.Delay(500);
                 // write log to txt file
                 using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                 {
@@ -656,6 +655,8 @@ namespace SMTUploadTool
                         }
 
                         
+                        // clear the memory
+                        //loglist.Clear();
 
                     }
                 }
@@ -890,11 +891,7 @@ namespace SMTUploadTool
 
         }
 
-        private void linkLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Form2 form2 = new Form2();
-            form2.Show();
-        }
+       
 
         /*
         static void WriteLogToBinaryFile(string filePath, List<LogInfo> data)
@@ -1152,7 +1149,8 @@ namespace SMTUploadTool
 
             // 保存快捷方式
             shortcut.Save();
-            //Console.WriteLine($"快捷方式已创建：{shortcutPath}");
+            
+            
         }
 
         private void linkPlantListFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

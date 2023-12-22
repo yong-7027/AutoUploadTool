@@ -42,7 +42,6 @@
             this.btnChangeSetting = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
             this.btnCancelSetting = new System.Windows.Forms.Button();
-            this.linkLog = new System.Windows.Forms.LinkLabel();
             this.label4 = new System.Windows.Forms.Label();
             this.numericUpDownLine = new System.Windows.Forms.NumericUpDown();
             this.txtLogPath = new System.Windows.Forms.Label();
@@ -189,18 +188,6 @@
             this.btnCancelSetting.UseVisualStyleBackColor = true;
             this.btnCancelSetting.Click += new System.EventHandler(this.btnCancelSetting_Click);
             // 
-            // linkLog
-            // 
-            this.linkLog.AutoSize = true;
-            this.linkLog.Location = new System.Drawing.Point(476, 240);
-            this.linkLog.Name = "linkLog";
-            this.linkLog.Size = new System.Drawing.Size(51, 13);
-            this.linkLog.TabIndex = 14;
-            this.linkLog.TabStop = true;
-            this.linkLog.Text = "View Log";
-            this.linkLog.Visible = false;
-            this.linkLog.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLog_LinkClicked);
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -272,7 +259,6 @@
             this.Controls.Add(this.txtLogPath);
             this.Controls.Add(this.numericUpDownLine);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.linkLog);
             this.Controls.Add(this.btnCancelSetting);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnChangeSetting);
@@ -311,7 +297,6 @@
         private System.Windows.Forms.Button btnChangeSetting;
         private System.Windows.Forms.Button btnApply;
         private System.Windows.Forms.Button btnCancelSetting;
-        private System.Windows.Forms.LinkLabel linkLog;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numericUpDownLine;
         private System.Windows.Forms.Label txtLogPath;
