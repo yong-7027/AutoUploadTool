@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using IWshRuntimeLibrary;
+using System.Runtime.CompilerServices;
 
 public struct ToolSetting
 {
@@ -467,13 +468,9 @@ namespace SMTUploadTool
                 // write log to txt file
                 using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                 {
-                    //get the time
-                    //sw.WriteLine("  Action>> Date : " + DateTime.Now.ToString("yyyy/MM/dd") + ", Time: " + DateTime.Now.ToString("HH:mm:ss") + ", Action: " + e.ChangeType + ", Folder Name: " + Path.GetFileName(e.FullPath) + ", Folder Path: " + e.FullPath);
-
-
-                    sw.WriteLine("("+ DateTime.Now.ToString("yyyy/MM/dd HH: mm:ss")+")Checking Folder <"+ Path.GetFileName(e.FullPath)+">...");
-                    //sw.WriteLine(" ");
-                    //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                   
+                    sw.WriteLine("("+ DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")+")Checking Folder <"+ Path.GetFileName(e.FullPath)+">...");
+                   
                 }
 
 
@@ -536,8 +533,77 @@ namespace SMTUploadTool
                         string model = "";
                         if (fileInfo1.Length != 0)
                         {
+                            
                             //MessageBox.Show(fileInfo1.Length.ToString());
-                            model = FindAndExtract(file, "CTM|");
+                            //model = FindAndExtract(file, "CTM|");
+                            string keyword= "CTM|";
+                            try
+                            {
+                                
+                                using (StreamReader reader = new StreamReader(file))
+                                {
+                                    
+                                    string firstLine = reader.ReadLine();
+
+                                    
+                                    if (!string.IsNullOrEmpty(firstLine))
+                                    {
+                                        int startIndex = firstLine.IndexOf(keyword);
+                                        if (startIndex != -1)
+                                        {
+                                            int commaIndex = firstLine.IndexOf(",", startIndex);
+                                            if (commaIndex != -1)
+                                            {
+                                                model= firstLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                                            }
+                                        }
+                                    }
+                                }
+
+                                //model = "ModelNotFound";
+                            }
+                            catch (Exception ex)
+                            {
+                                // delay 1s
+                                await Task.Delay(1);
+                                // try again
+                                try
+                                {
+                                    using (StreamReader reader = new StreamReader(file))
+                                    {
+
+                                        string firstLine = reader.ReadLine();
+
+
+                                        if (!string.IsNullOrEmpty(firstLine))
+                                        {
+                                            int startIndex = firstLine.IndexOf(keyword);
+                                            if (startIndex != -1)
+                                            {
+                                                int commaIndex = firstLine.IndexOf(",", startIndex);
+                                                if (commaIndex != -1)
+                                                {
+                                                    model = firstLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                catch(Exception ex1)
+                                {
+                                        // write log to txt file
+                                        using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                                        {
+                                            // record the exception
+                                            sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")Exception: " + ex1.Message);
+                                    
+
+                                        }
+                                        model = "Empty";
+                                }
+                               
+                            }
+
                         }
                         else
                         {
@@ -554,6 +620,7 @@ namespace SMTUploadTool
                         ///
                         string plantFilePath = "PlantList.txt";  //
                         string newFilePath="";
+                        string des=string.Empty;
                         // check if the Plantslist file exist
                         if (System.IO.File.Exists(plantFilePath))
                         { 
@@ -566,6 +633,7 @@ namespace SMTUploadTool
                             {
                                 if (model.Contains(plant))
                                 {
+                                    des = plant;
                                     //create new folder in destination folder
                                     newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
                                     if (!Directory.Exists(newFolderPath))
@@ -634,7 +702,11 @@ namespace SMTUploadTool
                         //loglist.Add(log);
 
                         //WriteLogToBinaryFile("Log.bin", loglist);
-                        
+                        // check if the des is Empty
+                        if (des == string.Empty)
+                        {
+                            des = @"/" + des;
+                        }
 
                         // create a txt file to record the log
                         // create text file if not exist
@@ -648,15 +720,14 @@ namespace SMTUploadTool
                         // write log to txt file
                         using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                         {
-                            //sw.WriteLine($"Time: {log.actionTime}, Status: {log.status}, Year: {log.year}, Month: {log.month}, Day: {log.day}, Folder Name: {log.folderName}, File Name: {log.fileName}, File Path: {log.filePath}, File Size: {log.fileSize}, Destination Path: {log.destinationPath}, Destination Folder Name: {log.destinationFolderName}");
-                            sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName);
+                            
+                            sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName+des);
                             sw.WriteLine(" ");
-                            //sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
+                           
                         }
 
                         
-                        // clear the memory
-                        //loglist.Clear();
+                       
 
                     }
                 }
@@ -980,14 +1051,18 @@ namespace SMTUploadTool
             }
             return -1;
         }
-
+        public string getLogFilePath()
+        {
+            return toolSetting.LogFilePath;
+        }   
+        /*
         static string FindAndExtract(string filePath, string keyword) ///CTM|
         {
             try
             {
                 // read all lines from file
                 string[] lines = System.IO.File.ReadAllLines(filePath);
-
+                
                 // search keyword in each line
                 foreach (string currentLine in lines)
                 {
@@ -1008,11 +1083,11 @@ namespace SMTUploadTool
             }
             catch (Exception ex)
             {
-               
+
                 return "Empty"; // 
             }
         }
-
+        */
         private void label4_Click(object sender, EventArgs e)
         {
 
