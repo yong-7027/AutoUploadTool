@@ -25,7 +25,7 @@ namespace SMTUploadTool
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                // 获取程序路径
+                // 
                 string assemblyPath = Assembly.GetExecutingAssembly().Location;
 
                 // 设置注册表项的键名
@@ -45,12 +45,13 @@ namespace SMTUploadTool
                 {
                     Application.Run(new Form1());
                 }
-
-                // 确保以管理员身份运行程序
-
+                Console.WriteLine("Hello World!");
+            
 
                 
-           // }
+
+                
+          
         }
 
         static bool IsProgramRegistered(string keyName, string assemblyPath)

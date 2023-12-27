@@ -664,19 +664,7 @@ namespace SMTUploadTool
         }
 
 
-       /*
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            // stop monitoring
-            if (watcher != null)
-            {
-                watcher.EnableRaisingEvents = false;
-                watcher.Dispose();
-            }
-            
-            this.Close();
-        }
-       */
+       
         private void btnChangeSetting_Click(object sender, EventArgs e)
         {
             linkPlantListFile.Enabled = true;
@@ -993,7 +981,7 @@ namespace SMTUploadTool
             return -1;
         }
 
-        static string FindAndExtract(string filePath, string keyword)
+        static string FindAndExtract(string filePath, string keyword) ///CTM|
         {
             try
             {
@@ -1164,9 +1152,14 @@ namespace SMTUploadTool
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("发生错误: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
                 MessageBox.Show("File not found!");
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
