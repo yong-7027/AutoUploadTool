@@ -51,6 +51,7 @@ namespace SMTUploadTool
         
 
         private FileSystemWatcher watcher;
+        //private FileSystemWatcher watcher1;
         Boolean initializaion;
         
         //List<LogInfo> logList;
@@ -284,8 +285,7 @@ namespace SMTUploadTool
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            // set the folder path to monitor
-            //string folderPathToMonitor = @"C:\Users\tcy\Desktop\checkFolder";
+            
 
             // create a new FileSystemWatcher and set its properties
             watcher = new FileSystemWatcher(toolSetting.monitorFolderPath);
@@ -301,6 +301,16 @@ namespace SMTUploadTool
             
             // start to monitor
             watcher.EnableRaisingEvents = true;
+
+
+            // find the grandparent folder of the monitor folder
+            string parentDirectory = Path.GetDirectoryName(toolSetting.monitorFolderPath); //
+            string grandParentDirectory = Path.GetDirectoryName(parentDirectory);// ..\BACKUP
+            //watcher1 = new FileSystemWatcher(toolSetting.monitorFolderPath);
+            //watcher1.NotifyFilter = NotifyFilters.DirectoryName;
+
+            //watcher1.EnableRaisingEvents = true;
+
 
             //Console.WriteLine($"Monitoring folder: {toolSetting.monitorFolderPath}");
             //MessageBox.Show($"Monitoring folder: {toolSetting.monitorFolderPath}");
@@ -335,7 +345,7 @@ namespace SMTUploadTool
             {
                 watcher.EnableRaisingEvents = false;
                 watcher.Dispose();
-                Console.WriteLine("Monitoring stopped.");
+                //Console.WriteLine("Monitoring stopped.");
                 btnStart.Enabled = true;
                 btnStop.Enabled = false;
                 btnStop.BackColor = Color.Gray;
@@ -447,6 +457,12 @@ namespace SMTUploadTool
             }
         }
         */
+        private static async void OnNewMonthlyCreated(object sender, FileSystemEventArgs e)
+        {
+            //stop monitoring watcher
+            
+
+        }
         private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
         {
             ToolSetting toolSetting = new ToolSetting();
@@ -703,9 +719,13 @@ namespace SMTUploadTool
 
                         //WriteLogToBinaryFile("Log.bin", loglist);
                         // check if the des is Empty
-                        if (des == string.Empty)
+                        if (des != string.Empty)
                         {
                             des = @"/" + des;
+                        }
+                        else
+                        {
+                            des = @"/";
                         }
 
                         // create a txt file to record the log
