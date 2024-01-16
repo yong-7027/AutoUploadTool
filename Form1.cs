@@ -36,7 +36,7 @@ namespace SMTUploadTool
 {
 
     public partial class Form1 : Form
-    {
+    {Boolean newMonthlyFolderCreated;
         private NotifyIcon notifyIcon;
         ToolSetting defaultSettings = new ToolSetting {
             monitorFolderPath = "",
@@ -51,8 +51,9 @@ namespace SMTUploadTool
         
 
         private FileSystemWatcher watcher;
-        //private FileSystemWatcher watcher1;
+        private FileSystemWatcher watcher1;
         Boolean initializaion;
+        
         
         //List<LogInfo> logList;
         
@@ -286,6 +287,21 @@ namespace SMTUploadTool
         private void btnStart_Click(object sender, EventArgs e)
         {
             
+            
+            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+            // if toolSetting.monitorFolderPath is doesn't exist, show error message, click btnstop
+            if (!Directory.Exists(toolSetting.monitorFolderPath))
+            {
+                // show warning messge box
+                MessageBox.Show("Warning: Monitor Folder path doesn't exist !");
+                // show the form on window screen and put center from minimized
+                
+                //this.StartPosition = FormStartPosition.CenterScreen;
+                this.WindowState = FormWindowState.Normal;
+                btnStop.PerformClick();
+                return;
+            }
+
 
             // create a new FileSystemWatcher and set its properties
             watcher = new FileSystemWatcher(toolSetting.monitorFolderPath);
@@ -303,14 +319,8 @@ namespace SMTUploadTool
             watcher.EnableRaisingEvents = true;
 
 
-            // find the grandparent folder of the monitor folder
-            string parentDirectory = Path.GetDirectoryName(toolSetting.monitorFolderPath); //
-            string grandParentDirectory = Path.GetDirectoryName(parentDirectory);// ..\BACKUP
-            //watcher1 = new FileSystemWatcher(toolSetting.monitorFolderPath);
-            //watcher1.NotifyFilter = NotifyFilters.DirectoryName;
-
-            //watcher1.EnableRaisingEvents = true;
-
+            
+            //MessageBox.Show(grandParentDirectory);
 
             //Console.WriteLine($"Monitoring folder: {toolSetting.monitorFolderPath}");
             //MessageBox.Show($"Monitoring folder: {toolSetting.monitorFolderPath}");
@@ -336,6 +346,18 @@ namespace SMTUploadTool
                 sw.WriteLine("App \"START\" time: " + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"));
                 
             }
+
+
+
+
+
+            // find the grandparent folder of the monitor folder
+            string parentDirectory = Path.GetDirectoryName(toolSetting.monitorFolderPath); //
+            string grandParentDirectory = Path.GetDirectoryName(parentDirectory);// ..\BACKUP
+            watcher1 = new FileSystemWatcher(grandParentDirectory);
+            watcher1.NotifyFilter = NotifyFilters.DirectoryName;
+            watcher1.Created += OnNewMonthlyCreated;
+            watcher1.EnableRaisingEvents = true;
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -352,6 +374,12 @@ namespace SMTUploadTool
                 btnStart.BackColor = Color.Green;
                
             }
+            if(watcher1 != null)
+            {
+                watcher1.EnableRaisingEvents = false;
+                //watcher1.Dispose();
+            }
+
             btnChangeSetting.Enabled = true;
             if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
@@ -459,8 +487,343 @@ namespace SMTUploadTool
         */
         private static async void OnNewMonthlyCreated(object sender, FileSystemEventArgs e)
         {
-            //stop monitoring watcher
+            // get watcher from outside
+            ToolSetting toolSetting = new ToolSetting();
+            string binDataFilePath = "settings.bin";
+            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
             
+            //MessageBox.Show(e.FullPath);
+            if(Directory.Exists(e.FullPath))
+            {
+                // get folder name
+                string folderName = Path.GetFileName(e.FullPath);  // e.fullpath = ..\BACKUP\202401   , folderName = 202401
+                
+                // check id the new folder is the now monthly folder
+                //get the current year and month(yyyyMM)
+                string currentYearMonth = DateTime.Now.ToString("yyyyMM");
+                // get the folder name
+                if(folderName == currentYearMonth)
+                {
+                    
+                    //MessageBox.Show(e.FullPath+"\n"+folderName);
+                    
+                    // check if the folder "newMonthlyFolder" is have any folder, if empty, wait for 1s and check again
+                    while (!Directory.GetDirectories(e.FullPath).Any())
+                    {
+                        await Task.Delay(1000);
+                        //MessageBox.Show(e.FullPath+" is empty");
+
+                        //check if the folder still exist
+                        if (!Directory.Exists(e.FullPath))
+                        {
+                            // write log to txt file
+                            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                            {
+                                // record the folder is deleted
+                                sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")Folder \"" + Path.GetFileName(e.FullPath) + "\" is deleted, please check the folder!");
+                                sw.WriteLine(" ");
+                            }
+                            // return
+                            //MessageBox.Show("Folder \"" + Path.GetFileName(e.FullPath) + "\" is deleted, please check the folder!");
+                            return;
+                            //break;
+                        }
+                    }
+                    // get the new monthly folder's all folder
+                    string[] newMonitorFolders = Directory.GetDirectories(e.FullPath);
+                    //get the directory in newMionitorFolders[0]
+                    string[] childNewMonitorFolders = Directory.GetDirectories(newMonitorFolders[0]);
+                    // check the length of childNewMonitorFolders, if length is 0
+                    if(childNewMonitorFolders.Length > 0)
+                    {
+                        //MessageBox.Show(childNewMonitorFolders[0]);
+                        // get the all files in childNewMonitorFolders[0]
+                        string[] files = Directory.GetFiles(childNewMonitorFolders[0]);
+
+
+                        // get folder's all files
+                        //string[] files = Directory.GetFiles(e.FullPath);
+
+                        // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
+                        foreach (string file in files)
+                        {
+                            if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
+                            {
+                                //check if the file content is empty, if empty, refresh the file
+                                FileInfo fileInfo = new FileInfo(file);
+                                if (fileInfo.Length == 0)
+                                {
+
+
+                                    while (fileInfo.Length == 0)
+                                    {
+                                        //await Task.Delay(1);
+                                        fileInfo.Refresh();
+                                        //if time is more than 10s, break the loop
+                                        if ((DateTime.Now - fileInfo.LastWriteTime).TotalSeconds > 10)
+                                        {
+                                            // write log to txt file
+                                            if (!System.IO.File.Exists(toolSetting.LogFilePath))
+                                            {
+                                                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                                                {
+                                                    // 
+                                                }
+                                            }
+                                            // write log to txt file
+                                            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                                            {
+                                                // record the file content is empty,and time 
+
+                                                sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")File \"" + Path.GetFileName(file) + "\" is empty, please check the file!");
+
+
+                                            }
+                                            break;
+                                        }
+
+
+
+                                    }
+                                }
+                                // get model
+                                FileInfo fileInfo1 = new FileInfo(file);
+                                string model = "";
+                                if (fileInfo1.Length != 0)
+                                {
+
+                                    //MessageBox.Show(fileInfo1.Length.ToString());
+                                    //model = FindAndExtract(file, "CTM|");
+                                    string keyword = "CTM|";
+                                    try
+                                    {
+
+                                        using (StreamReader reader = new StreamReader(file))
+                                        {
+
+                                            string firstLine = reader.ReadLine();
+
+
+                                            if (!string.IsNullOrEmpty(firstLine))
+                                            {
+                                                int startIndex = firstLine.IndexOf(keyword);
+                                                if (startIndex != -1)
+                                                {
+                                                    int commaIndex = firstLine.IndexOf(",", startIndex);
+                                                    if (commaIndex != -1)
+                                                    {
+                                                        model = firstLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        //model = "ModelNotFound";
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // delay 1s
+                                        await Task.Delay(1);
+                                        // try again
+                                        try
+                                        {
+                                            using (StreamReader reader = new StreamReader(file))
+                                            {
+
+                                                string firstLine = reader.ReadLine();
+
+
+                                                if (!string.IsNullOrEmpty(firstLine))
+                                                {
+                                                    int startIndex = firstLine.IndexOf(keyword);
+                                                    if (startIndex != -1)
+                                                    {
+                                                        int commaIndex = firstLine.IndexOf(",", startIndex);
+                                                        if (commaIndex != -1)
+                                                        {
+                                                            model = firstLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex1)
+                                        {
+                                            // write log to txt file
+                                            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                                            {
+                                                // record the exception
+                                                sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")Exception: " + ex1.Message);
+
+
+                                            }
+                                            model = "Empty";
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    model = "EmptyData";
+                                }
+                                //MessageBox.Show(e.FullPath);
+                                string fileName = Path.GetFileName(file);
+                                // cut the "." and words after the "." of fileName
+                                fileName = fileName.Substring(0, fileName.IndexOf("."));
+
+                                string newFileName = toolSetting.line + "_" + model + "_" + Path.GetFileName(childNewMonitorFolders[0]) + ".txt";
+
+                                //////////////////////////////
+                                ///
+                                string plantFilePath = "PlantList.txt";  //
+                                string newFilePath = "";
+                                string des = string.Empty;
+                                // check if the Plantslist file exist
+                                if (System.IO.File.Exists(plantFilePath))
+                                {
+                                    // read line by line
+                                    string[] plants = System.IO.File.ReadAllLines(plantFilePath);
+
+                                    string newFolderPath;
+                                    Boolean plantExist = false;
+                                    foreach (string plant in plants)
+                                    {
+                                        if (model.Contains(plant))
+                                        {
+                                            des = plant;
+                                            //create new folder in destination folder
+                                            newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
+                                            if (!Directory.Exists(newFolderPath))
+                                            {
+                                                Directory.CreateDirectory(newFolderPath);
+                                            }
+                                            // new file path
+                                            newFilePath = newFolderPath + @"\" + newFileName;
+                                            System.IO.File.Copy(file, newFilePath, true);
+                                            plantExist = true;
+                                            break;
+                                        }
+                                    }
+                                    if (plantExist == false)
+                                    {
+                                        //newFolderPath = toolSetting.destinateFolderPath + @"\other";
+                                        //newFilePath = newFolderPath + @"\" + newFileName;
+                                        newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                        System.IO.File.Copy(file, newFilePath, true);
+                                    }
+                                }
+                                else
+                                {
+                                    newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                    System.IO.File.Copy(file, newFilePath, true);
+                                }
+                                //Console.WriteLine($"New file created: {newFilePath}");
+
+                                // log section
+                                //List<LogInfo> loglist = ReadLogFromBinaryFile("Log.bin");
+
+
+                                //write the log
+                                LogInfo log = new LogInfo();
+                                //get the time
+                                log.actionTime = DateTime.Now.ToString("HH:mm:ss");
+                                log.year = DateTime.Now.ToString("yyyy");
+                                log.month = DateTime.Now.ToString("MM");
+                                log.day = DateTime.Now.ToString("dd");
+                                log.fileName = newFileName;
+                                log.filePath = childNewMonitorFolders[0];
+                                //log.status = "Successful";
+                                //if new file is sucessfully copy to destination status is "Successful",else status is failed
+                                if (System.IO.File.Exists(newFilePath))
+                                {
+                                    log.status = "Successful";
+                                }
+                                else
+                                {
+                                    log.status = "Failed";
+                                }
+
+                                log.folderName = Path.GetFileName(childNewMonitorFolders[0]);
+
+                                log.fileSize = fileInfo1.Length;
+                                log.destinationPath = newFilePath;
+                                log.destinationFolderName = Path.GetFileName(toolSetting.destinateFolderPath);
+
+
+                                //loglist.Add(log);
+
+                                //WriteLogToBinaryFile("Log.bin", loglist);
+                                // check if the des is Empty
+                                if (des != string.Empty)
+                                {
+                                    des = @"/" + des;
+                                }
+                                else
+                                {
+                                    des = @"/";
+                                }
+                                // create a txt file to record the log
+                                // create text file if not exist
+                                if (!System.IO.File.Exists(toolSetting.LogFilePath))
+                                {
+                                    using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                                    {
+                                        // 
+                                    }
+                                }
+                                // write log to txt file
+                                using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                                {
+                                    sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", Line:" + toolSetting.line + ", Model:" + model + ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName + des);
+                                    sw.WriteLine(" ");
+
+                                }
+                            }
+                        }
+                        /////
+                    }
+                    else
+                    {
+                        //MessageBox.Show("0");
+                    }
+                    
+
+
+
+
+                    //MessageBox.Show(newMonitorFolders[0]+"folder0 ");
+                    
+                    toolSetting.monitorFolderPath = newMonitorFolders[0];
+                    // write the new monitor folder path to binary file
+                    WriteStructToBinaryFile(binDataFilePath, toolSetting);
+                    // get the form object
+                    Form1 form1 = (Form1)Application.OpenForms["Form1"];
+                    // change the monitor folder path in the form
+                    form1.Invoke((MethodInvoker)delegate {
+                        // Running on the UI thread
+                        form1.txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
+                        form1.btnStop.PerformClick();
+                        form1.btnStart.PerformClick();
+                        //form1.Refresh();
+                        //dispose the watcher1
+                        
+
+                      
+                    });
+                    
+
+
+
+                }
+                else
+                {
+                    return;
+                }
+                
+
+
+            }
 
         }
         private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
@@ -490,11 +853,26 @@ namespace SMTUploadTool
                 }
 
 
-                // loop until the folder is the target file
+                // loop until the folder exist the target file
                 while (!Directory.GetFiles(e.FullPath).Any(file =>
-                    string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
+                string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
                 {
                     await Task.Delay(1); // every ? second check once, can be adjusted according to the actual situation
+                    //check if the folder still exist
+                    if (!Directory.Exists(e.FullPath))
+                    {
+                        // write log to txt file
+                        using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                        {
+                            // record the folder is deleted
+                            sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")Folder \"" + Path.GetFileName(e.FullPath) + "\" is deleted, please check the folder!");
+                            sw.WriteLine(" ");
+                        }
+                        // return
+                        MessageBox.Show("Folder \"" + Path.GetFileName(e.FullPath) + "\" is deleted, please check the folder!");
+                        return;
+                        //break;
+                    }
                 }
 
                 // get folder's all files
