@@ -831,27 +831,38 @@ namespace SMTUploadTool
             ToolSetting toolSetting = new ToolSetting();
             string binDataFilePath = "settings.bin";
             toolSetting = ReadStructFromBinaryFile(binDataFilePath);
+            Boolean logCheck=false;
+            //create form1 object
+            Form1 form1 = (Form1)Application.OpenForms["Form1"];
+            // check if the form1 checkbox is checked
+            if (form1.checkLogFunc.Checked == true)
+            {
+                logCheck = true;
+            }
+            //form1.Close();
+          
 
             if (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Renamed)
             {
-                // write log to txt file
-                if (!System.IO.File.Exists(toolSetting.LogFilePath))
+
+
+                if (logCheck)
                 {
-                    using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                    // write log to txt file
+                    if (!System.IO.File.Exists(toolSetting.LogFilePath))
                     {
-                        // 
+                        using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                        {
+                            // 
+                        }
+                    }
+                    using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                    {
+
+                        sw.WriteLine("(" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")Checking Folder <" + Path.GetFileName(e.FullPath) + ">...");
+
                     }
                 }
-                //sleep 0.5s
-                //await Task.Delay(500);
-                // write log to txt file
-                using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
-                {
-                   
-                    sw.WriteLine("("+ DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss")+")Checking Folder <"+ Path.GetFileName(e.FullPath)+">...");
-                   
-                }
-
 
                 // loop until the folder exist the target file
                 while (!Directory.GetFiles(e.FullPath).Any(file =>
@@ -861,6 +872,7 @@ namespace SMTUploadTool
                     //check if the folder still exist
                     if (!Directory.Exists(e.FullPath))
                     {
+
                         // write log to txt file
                         using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
                         {
@@ -869,7 +881,7 @@ namespace SMTUploadTool
                             sw.WriteLine(" ");
                         }
                         // return
-                        MessageBox.Show("Folder \"" + Path.GetFileName(e.FullPath) + "\" is deleted, please check the folder!");
+                        //MessageBox.Show("Folder \"" + Path.GetFileName(e.FullPath) + "\" is deleted, please check the folder!");
                         return;
                         //break;
                     }
@@ -896,6 +908,7 @@ namespace SMTUploadTool
                                 //if time is more than 10s, break the loop
                                 if ((DateTime.Now - fileInfo.LastWriteTime).TotalSeconds > 10)
                                 {
+
                                     // write log to txt file
                                     if (!System.IO.File.Exists(toolSetting.LogFilePath))
                                     {
@@ -1103,25 +1116,30 @@ namespace SMTUploadTool
                         }
                         else
                         {
-                            des = @"/";
+                            des = " ";
                         }
 
-                        // create a txt file to record the log
-                        // create text file if not exist
-                        if (!System.IO.File.Exists(toolSetting.LogFilePath))
+
+                        if (logCheck)
                         {
-                            using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+
+                            // create a txt file to record the log
+                            // create text file if not exist
+                            if (!System.IO.File.Exists(toolSetting.LogFilePath))
                             {
-                                // 
+                                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                                {
+                                    // 
+                                }
                             }
-                        }
-                        // write log to txt file
-                        using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
-                        {
-                            
-                            sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime +", Line:"+toolSetting.line+", Model:"+model+ ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName+des);
-                            sw.WriteLine(" ");
-                           
+                            // write log to txt file
+                            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                            {
+
+                                sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", Line:" + toolSetting.line + ", Model:" + model + ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName + des);
+                                sw.WriteLine(" ");
+
+                            }
                         }
 
                         
@@ -1409,7 +1427,7 @@ namespace SMTUploadTool
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 
-            // 当用户点击主窗体关闭按钮时，只隐藏而不关闭
+            // when user click the "X" button, hide the window instead of close the application
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
@@ -1449,10 +1467,7 @@ namespace SMTUploadTool
             }
             return -1;
         }
-        public string getLogFilePath()
-        {
-            return toolSetting.LogFilePath;
-        }   
+        
         /*
         static string FindAndExtract(string filePath, string keyword) ///CTM|
         {
@@ -1524,27 +1539,27 @@ namespace SMTUploadTool
 
         private void InitializeTrayIcon()
         {
-            // 创建系统托盘图标
+            // create a new tray icon
             notifyIcon = new NotifyIcon();
-            notifyIcon.Icon = new Icon("icon.ico"); // 替换为你的图标文件路径
-            notifyIcon.Text = "SMTUpload"; // 替换为你的应用程序名称
+            notifyIcon.Icon = new Icon("icon.ico"); // replace the icon
+            notifyIcon.Text = "SMTUpload"; // replace the text
             notifyIcon.Visible = true;
 
 
-            // 添加双击事件处理程序，用于显示/隐藏主窗体
+            // add double click event, when user double click the icon, show the main window
             notifyIcon.DoubleClick += (sender, e) => ToggleMainWindow();
 
-            // 创建右键菜单
+            // create a context menu when user right click the icon
             ContextMenu contextMenu = new ContextMenu();
             contextMenu.MenuItems.Add("Exit", (sender, e) => ExitApplication());
 
-            // 将右键菜单分配给系统托盘图标
+            // assign the context menu to the tray icon
             notifyIcon.ContextMenu = contextMenu;
         }
 
         private void ToggleMainWindow()
         {
-            // 显示/隐藏主窗体
+            // change the window state
             if (WindowState == FormWindowState.Minimized)
             {
                 Show();
@@ -1559,7 +1574,7 @@ namespace SMTUploadTool
 
         private void ExitApplication()
         {
-            // 关闭应用程序
+            // close the application
             notifyIcon.Visible = false;
             if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
@@ -1578,7 +1593,7 @@ namespace SMTUploadTool
         }
         private void SystemEvents_SessionEnding(object sender, SessionEndingEventArgs e)
         {
-            // 在这里添加处理系统关机事件的代码
+            // here you can handle session ending event
             if (!System.IO.File.Exists(toolSetting.LogFilePath))
             {
                 using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
@@ -1596,19 +1611,19 @@ namespace SMTUploadTool
 
         static void CreateShortcut(string shortcutPath, string targetPath)
         {
-            // 创建 WshShell 对象
+            
             WshShell shell = new WshShell();
 
-            // 创建快捷方式对象
+            //
             IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
 
-            // 设置快捷方式属性
+            // set shortcut's properties
             shortcut.TargetPath = targetPath;
             shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);
             shortcut.Description = $"{Path.GetFileNameWithoutExtension(targetPath)} Shortcut";
-            shortcut.IconLocation = targetPath;  // 使用应用程序图标
+            shortcut.IconLocation = targetPath;  // use target's icon
 
-            // 保存快捷方式
+            // save shortcut
             shortcut.Save();
             
             
@@ -1633,6 +1648,11 @@ namespace SMTUploadTool
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

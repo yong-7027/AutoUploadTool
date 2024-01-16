@@ -48,6 +48,7 @@
             this.btnLogPath = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.linkPlantListFile = new System.Windows.Forms.LinkLabel();
+            this.checkLogFunc = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).BeginInit();
             this.SuspendLayout();
             // 
@@ -240,7 +241,7 @@
             // 
             this.linkPlantListFile.AutoSize = true;
             this.linkPlantListFile.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
-            this.linkPlantListFile.Location = new System.Drawing.Point(424, 18);
+            this.linkPlantListFile.Location = new System.Drawing.Point(424, 23);
             this.linkPlantListFile.Name = "linkPlantListFile";
             this.linkPlantListFile.Size = new System.Drawing.Size(115, 13);
             this.linkPlantListFile.TabIndex = 20;
@@ -248,11 +249,26 @@
             this.linkPlantListFile.Text = "Set Plant List (optional)";
             this.linkPlantListFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkPlantListFile_LinkClicked);
             // 
+            // checkLogFunc
+            // 
+            this.checkLogFunc.AutoSize = true;
+            this.checkLogFunc.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkLogFunc.Checked = true;
+            this.checkLogFunc.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkLogFunc.Location = new System.Drawing.Point(451, 219);
+            this.checkLogFunc.Name = "checkLogFunc";
+            this.checkLogFunc.Size = new System.Drawing.Size(88, 17);
+            this.checkLogFunc.TabIndex = 21;
+            this.checkLogFunc.Text = "Log Function";
+            this.checkLogFunc.UseVisualStyleBackColor = true;
+            this.checkLogFunc.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 282);
+            this.Controls.Add(this.checkLogFunc);
             this.Controls.Add(this.linkPlantListFile);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnLogPath);
@@ -303,6 +319,7 @@
         private System.Windows.Forms.Button btnLogPath;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.LinkLabel linkPlantListFile;
+        private System.Windows.Forms.CheckBox checkLogFunc;
     }
 }
 

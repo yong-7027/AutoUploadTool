@@ -28,16 +28,16 @@ namespace SMTUploadTool
                 // 
                 string assemblyPath = Assembly.GetExecutingAssembly().Location;
 
-                // 设置注册表项的键名
+                
                 const string keyName = "SMTUploadTool";
 
-                // 设置注册表项的值名
+                
                 const string valueName = "SMTUploadToolPath";
 
-                // 判断是否已经添加到注册表中
+               
                 if (!IsProgramRegistered(keyName, assemblyPath))
                 {
-                    // 添加到注册表中
+                    
                     RegisterProgram(keyName, valueName, assemblyPath);
                     RunAsAdmin(assemblyPath);
                 }

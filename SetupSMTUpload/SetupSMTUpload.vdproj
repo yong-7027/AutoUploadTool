@@ -15,20 +15,20 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_2CDA7EF04821448EB8DCA0FBC3A80C48"
+        "MsmKey" = "8:_12DD63EC480B4A4394D1ADCFFCC19FB8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_864BA9C8EB1348A39274067128A91785"
+        "MsmKey" = "8:_6667A8FA8B1B4E07A32017B4A73B47AC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_A50BDF45F6E9D32D908955B2E0204F61"
-        "OwnerKey" = "8:_864BA9C8EB1348A39274067128A91785"
+        "OwnerKey" = "8:_6667A8FA8B1B4E07A32017B4A73B47AC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -46,19 +46,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2CDA7EF04821448EB8DCA0FBC3A80C48"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_864BA9C8EB1348A39274067128A91785"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_A50BDF45F6E9D32D908955B2E0204F61"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_12DD63EC480B4A4394D1ADCFFCC19FB8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6667A8FA8B1B4E07A32017B4A73B47AC"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -79,6 +79,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -95,6 +103,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -124,14 +140,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2CDA7EF04821448EB8DCA0FBC3A80C48"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_12DD63EC480B4A4394D1ADCFFCC19FB8"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:SMTUploadTool, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_2CDA7EF04821448EB8DCA0FBC3A80C48"
+                    "_12DD63EC480B4A4394D1ADCFFCC19FB8"
                     {
                     "Name" = "8:SMTUploadTool.exe"
                     "Attributes" = "3:512"
@@ -282,15 +298,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:SetupSMTUpload"
-        "ProductCode" = "8:{4BDD920A-7007-4EB9-86EE-1C89919329A7}"
-        "PackageCode" = "8:{6ED2A38C-A78C-4AA0-8416-5163A328C5F8}"
+        "ProductCode" = "8:{6B991076-CB90-42C0-A753-68D4638E63CE}"
+        "PackageCode" = "8:{BED60DC0-8110-4F25-B563-6E94C0668002}"
         "UpgradeCode" = "8:{3EC470E0-3871-4DCA-8748-AC237411CCC0}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:CTMIT"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -298,7 +314,7 @@
         "Subject" = "8:"
         "ARPCONTACT" = "8:CTMIT"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:"
+        "ARPCOMMENTS" = "8:A tool fetch and upload the target to certain folder"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:"
         "ARPIconIndex" = "3:0"
@@ -403,29 +419,29 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_265924DE67654A99BFB838CE785710AD"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8E0DB49FAAC2482489F1DBE0B6CCDD00"
             {
             "Name" = "8:SMT Upload"
             "Arguments" = "8:"
-            "Description" = "8:"
+            "Description" = "8:A tool fetch and upload the target to certain folder"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_864BA9C8EB1348A39274067128A91785"
+            "Target" = "8:_6667A8FA8B1B4E07A32017B4A73B47AC"
             "Folder" = "8:_CFE3265A657A4416A2655F8B8492D0A3"
             "WorkingFolder" = "8:_792AF539834B44DAB23408CF0B8A2218"
             "Icon" = "8:_CEEC71C7E1854528BAFD026C83EA1C93"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_538A1B8884C7421EB9A7E556821FEDC8"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_BCD571C5010E43CD9D497B7E9A9E1961"
             {
             "Name" = "8:SMT Upload"
             "Arguments" = "8:"
-            "Description" = "8:"
+            "Description" = "8:A tool fetch and upload the target to certain folder"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_864BA9C8EB1348A39274067128A91785"
+            "Target" = "8:_6667A8FA8B1B4E07A32017B4A73B47AC"
             "Folder" = "8:_44AE2188A1DF4370831CA77DA842439A"
             "WorkingFolder" = "8:_792AF539834B44DAB23408CF0B8A2218"
             "Icon" = "8:_CEEC71C7E1854528BAFD026C83EA1C93"
@@ -830,9 +846,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_864BA9C8EB1348A39274067128A91785"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_6667A8FA8B1B4E07A32017B4A73B47AC"
             {
-            "SourcePath" = "8:..\\obj\\Debug\\SMTUploadTool.exe"
+            "SourcePath" = "8:..\\obj\\Release\\SMTUploadTool.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_792AF539834B44DAB23408CF0B8A2218"
