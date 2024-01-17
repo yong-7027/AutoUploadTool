@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.txtBoxMonitorFolder = new System.Windows.Forms.TextBox();
@@ -49,6 +50,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.linkPlantListFile = new System.Windows.Forms.LinkLabel();
             this.checkLogFunc = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.btnReupload = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLine)).BeginInit();
             this.SuspendLayout();
             // 
@@ -255,19 +260,46 @@
             this.checkLogFunc.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkLogFunc.Checked = true;
             this.checkLogFunc.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.helpProvider1.SetHelpString(this.checkLogFunc, "dadad");
             this.checkLogFunc.Location = new System.Drawing.Point(451, 219);
             this.checkLogFunc.Name = "checkLogFunc";
+            this.helpProvider1.SetShowHelp(this.checkLogFunc, true);
             this.checkLogFunc.Size = new System.Drawing.Size(88, 17);
             this.checkLogFunc.TabIndex = 21;
             this.checkLogFunc.Text = "Log Function";
             this.checkLogFunc.UseVisualStyleBackColor = true;
             this.checkLogFunc.CheckedChanged += new System.EventHandler(this.logCheckBox_Click);
             // 
+            // toolTip1
+            // 
+            this.toolTip1.Tag = "";
+            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
+            // 
+            // btnReupload
+            // 
+            this.btnReupload.Location = new System.Drawing.Point(222, 235);
+            this.btnReupload.Name = "btnReupload";
+            this.btnReupload.Size = new System.Drawing.Size(79, 23);
+            this.btnReupload.TabIndex = 22;
+            this.btnReupload.Text = "Re-upload All";
+            this.btnReupload.UseVisualStyleBackColor = true;
+            this.btnReupload.Click += new System.EventHandler(this.btnReupload_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(307, 235);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(93, 23);
+            this.progressBar1.TabIndex = 23;
+            this.progressBar1.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 282);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.btnReupload);
             this.Controls.Add(this.checkLogFunc);
             this.Controls.Add(this.linkPlantListFile);
             this.Controls.Add(this.label5);
@@ -320,6 +352,10 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.LinkLabel linkPlantListFile;
         private System.Windows.Forms.CheckBox checkLogFunc;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.Button btnReupload;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

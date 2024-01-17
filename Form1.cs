@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using IWshRuntimeLibrary;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 public struct ToolSetting
 {
@@ -124,7 +125,21 @@ namespace SMTUploadTool
         {
             WindowState = FormWindowState.Minimized;
             CenterToScreen();
-            
+            toolTip1.SetToolTip(this.btnStart, "Start to monitor");
+            toolTip1.SetToolTip(this.btnStop, "Stop to monitor");
+            toolTip1.SetToolTip(this.btnChangeSetting, "Change the setting");
+            toolTip1.SetToolTip(this.btnApply, "Apply the setting");
+            toolTip1.SetToolTip(this.btnCancelSetting, "Cancel the setting");
+            toolTip1.SetToolTip(this.btnLogPath, "Change the log file path");
+            toolTip1.SetToolTip(this.btnDestinationFolder, "Change the destination folder path");
+            toolTip1.SetToolTip(this.btnMonitorFolder, "Change the monitor folder path");
+            toolTip1.SetToolTip(this.linkPlantListFile, "Open the PlantList.txt");
+            toolTip1.SetToolTip(this.checkLogFunc, "Uncheck the box if you want the program to handle" +
+                                                   "\na huge number of folders at the same time");
+            toolTip1.SetToolTip(this.numericUpDownLine, "Set the Line Number");
+            toolTip1.SetToolTip(this.btnReupload, "Reupload all the files " +
+                                                "\nform:" +toolSetting.monitorFolderPath+
+                                                "\nto     : "+toolSetting.destinateFolderPath);
             //MessageBox.Show(toolSetting.LogFilePath);
             //string content = reader.ReadToEnd();
             //txtBoxMonitorFolder.Text = content;
@@ -1647,7 +1662,7 @@ namespace SMTUploadTool
 
             try
             {
-                // 使用 Process.Start 打开文件
+          
                 Process.Start(filePath);
             }
             catch (Exception ex)
@@ -1678,6 +1693,266 @@ namespace SMTUploadTool
                 sw.WriteLine("  Notification>> Log Record Function : "+status+" ("+dateTime+")");
                 sw.WriteLine(" ");
             }
+        }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+
+        }
+
+        private void btnReupload_Click(object sender, EventArgs e)
+        {
+            // get all the folders in monitor folder
+            string[] folders = Directory.GetDirectories(toolSetting.monitorFolderPath);
+            progressBar1.Maximum = folders.Length;
+            progressBar1.Value = 0;
+            progressBar1.Minimum = 0;
+            progressBar1.Visible = true;
+            btnReupload.Enabled = false;
+
+            // loop all the folders
+            foreach (string folder in folders)
+            {
+                progressBar1.Value++;
+                
+                
+                Boolean logCheck = false;
+                //if (checkLogFunc.Checked == true)
+                //{
+                //    logCheck = true;
+                //}
+                // get the folder name
+                string folderName = Path.GetFileName(folder);
+                // get the all files in the folder
+                string[] files = Directory.GetFiles(folder);
+                //get path of the folder
+                string folderPath = Path.GetDirectoryName(folder);
+
+                // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
+                foreach (string file in files)
+                {
+                    if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        //check if the file content is empty, if empty, refresh the file
+                        FileInfo fileInfo = new FileInfo(file);
+                        
+
+
+                        // get model
+                        FileInfo fileInfo1 = new FileInfo(file);
+                        string model = "";
+                        if (fileInfo1.Length != 0)
+                        {
+
+                            //MessageBox.Show(fileInfo1.Length.ToString());
+                            //model = FindAndExtract(file, "CTM|");
+                            string keyword = "CTM|";
+                            try
+                            {
+
+                                using (StreamReader reader = new StreamReader(file))
+                                {
+
+                                    string firstLine = reader.ReadLine();
+
+
+                                    if (!string.IsNullOrEmpty(firstLine))
+                                    {
+                                        int startIndex = firstLine.IndexOf(keyword);
+                                        if (startIndex != -1)
+                                        {
+                                            int commaIndex = firstLine.IndexOf(",", startIndex);
+                                            if (commaIndex != -1)
+                                            {
+                                                model = firstLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                                            }
+                                        }
+                                    }
+                                }
+
+                                //model = "ModelNotFound";
+                            }
+                            catch (Exception ex)
+                            {
+                                // delay 1s
+                                //await Task.Delay(1);
+                                // try again
+                                try
+                                {
+                                    using (StreamReader reader = new StreamReader(file))
+                                    {
+
+                                        string firstLine = reader.ReadLine();
+
+
+                                        if (!string.IsNullOrEmpty(firstLine))
+                                        {
+                                            int startIndex = firstLine.IndexOf(keyword);
+                                            if (startIndex != -1)
+                                            {
+                                                int commaIndex = firstLine.IndexOf(",", startIndex);
+                                                if (commaIndex != -1)
+                                                {
+                                                    model = firstLine.Substring(startIndex + keyword.Length, commaIndex - (startIndex + keyword.Length));
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (Exception ex1)
+                                {
+                                    // write log to txt file
+                                    using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                                    {
+                                        // record the exception
+                                        sw.WriteLine("  WARNING>> (" + DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + ")Exception: " + ex1.Message);
+
+
+                                    }
+                                    model = "Empty";
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            model = "EmptyData";
+                        }
+                        //MessageBox.Show(e.FullPath);
+                        string fileName = Path.GetFileName(file);
+                        // cut the "." and words after the "." of fileName
+                        fileName = fileName.Substring(0, fileName.IndexOf("."));
+
+                        string newFileName = toolSetting.line + "_" + model + "_" + Path.GetFileName(folder) + ".txt";
+
+                        //////////////////////////////
+                        ///
+                        string plantFilePath = "PlantList.txt";  //
+                        string newFilePath = "";
+                        string des = string.Empty;
+                        // check if the Plantslist file exist
+                        if (System.IO.File.Exists(plantFilePath))
+                        {
+                            // read line by line
+                            string[] plants = System.IO.File.ReadAllLines(plantFilePath);
+
+                            string newFolderPath;
+                            Boolean plantExist = false;
+                            foreach (string plant in plants)
+                            {
+                                if (model.Contains(plant))
+                                {
+                                    des = plant;
+                                    //create new folder in destination folder
+                                    newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
+                                    if (!Directory.Exists(newFolderPath))
+                                    {
+                                        Directory.CreateDirectory(newFolderPath);
+                                    }
+                                    // new file path
+                                    newFilePath = newFolderPath + @"\" + newFileName;
+                                    System.IO.File.Copy(file, newFilePath, true);
+                                    plantExist = true;
+                                    break;
+                                }
+                            }
+                            if (plantExist == false)
+                            {
+                                //newFolderPath = toolSetting.destinateFolderPath + @"\other";
+                                //newFilePath = newFolderPath + @"\" + newFileName;
+                                newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                System.IO.File.Copy(file, newFilePath, true);
+                            }
+
+
+                        }
+                        else
+                        {
+                            newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                            System.IO.File.Copy(file, newFilePath, true);
+                        }
+
+
+
+
+                        //Console.WriteLine($"New file created: {newFilePath}");
+
+                        // log section
+                        //List<LogInfo> loglist = ReadLogFromBinaryFile("Log.bin");
+
+
+                        //write the log
+                        LogInfo log = new LogInfo();
+                        //get the time
+                        log.actionTime = DateTime.Now.ToString("HH:mm:ss");
+                        log.year = DateTime.Now.ToString("yyyy");
+                        log.month = DateTime.Now.ToString("MM");
+                        log.day = DateTime.Now.ToString("dd");
+                        log.fileName = newFileName;
+                        log.filePath = folderPath;
+                        //log.status = "Successful";
+                        //if new file is sucessfully copy to destination status is "Successful",else status is failed
+                        if (System.IO.File.Exists(newFilePath))
+                        {
+                            log.status = "Successful";
+                        }
+                        else
+                        {
+                            log.status = "Failed";
+                        }
+
+                        log.folderName = Path.GetFileName(folderPath);
+
+                        log.fileSize = fileInfo1.Length;
+                        log.destinationPath = newFilePath;
+                        log.destinationFolderName = Path.GetFileName(toolSetting.destinateFolderPath);
+
+
+                        //loglist.Add(log);
+
+                        //WriteLogToBinaryFile("Log.bin", loglist);
+                        // check if the des is Empty
+                        if (des != string.Empty)
+                        {
+                            des = @"/" + des;
+                        }
+                        else
+                        {
+                            des = " ";
+                        }
+
+
+                        if (logCheck)
+                        {
+
+                            // create a txt file to record the log
+                            // create text file if not exist
+                            if (!System.IO.File.Exists(toolSetting.LogFilePath))
+                            {
+                                using (FileStream fs = new FileStream(toolSetting.LogFilePath, FileMode.Create, FileAccess.Write))
+                                {
+                                    // 
+                                }
+                            }
+                            // write log to txt file
+                            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+                            {
+
+                                sw.WriteLine("  Result>> Date : " + log.year + "/" + log.month + "/" + log.day + ", Time: " + log.actionTime + ", Line:" + toolSetting.line + ", Model:" + model + ", File Name: " + log.fileName + ", File Size: " + log.fileSize + "(bytes)" + ", Status: " + log.status + ", From Folder: " + log.folderName + ", To Destination Folder: " + log.destinationFolderName + des);
+                                sw.WriteLine(" ");
+
+                            }
+                        }
+
+
+
+
+                    }
+                }
+            }
+            btnReupload.Enabled = true;
+            progressBar1.Visible = false;
         }
     }
 }
