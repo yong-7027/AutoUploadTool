@@ -529,10 +529,14 @@ namespace SMTUploadTool
                             //break;
                         }
                     }
+                    
+
+
                     // get the new monthly folder's all folder
                     string[] newMonitorFolders = Directory.GetDirectories(e.FullPath);
                     //get the directory in newMionitorFolders[0]
                     string[] childNewMonitorFolders = Directory.GetDirectories(newMonitorFolders[0]);
+
                     // check the length of childNewMonitorFolders, if length is 0
                     if(childNewMonitorFolders.Length > 0)
                     {
@@ -802,9 +806,17 @@ namespace SMTUploadTool
                     // change the monitor folder path in the form
                     form1.Invoke((MethodInvoker)delegate {
                         // Running on the UI thread
+
                         form1.txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
+                        // open the UI on window screen/要打开代码才能点击按钮
+                        form1.ToggleMainWindow();
+
+                        form1.WindowState = FormWindowState.Normal;
                         form1.btnStop.PerformClick();
-                        form1.btnStart.PerformClick();
+                        form1.btnChangeSetting.PerformClick();
+                        form1.btnApply.PerformClick();
+                        //form1.btnStart.PerformClick();
+                        form1.ToggleMainWindow();
                         //form1.Refresh();
                         //dispose the watcher1
                         
@@ -1645,14 +1657,27 @@ namespace SMTUploadTool
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            
-        }
+       
 
-        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        private void logCheckBox_Click(object sender, EventArgs e)
         {
-
+            // get datetime (yyyy/MM/dd HH:mm:ss)
+            string dateTime = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            string status = "ON";
+            if (checkLogFunc.Checked == true)
+            {
+                status = "ON";
+            }
+            else
+            {
+                status = "OFF";
+            }
+            using (StreamWriter sw = new StreamWriter(toolSetting.LogFilePath, true))
+            {
+                // record the folder is deleted
+                sw.WriteLine("  Notification>> Log Record Function : "+status+" ("+dateTime+")");
+                sw.WriteLine(" ");
+            }
         }
     }
 }

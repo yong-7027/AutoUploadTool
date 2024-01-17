@@ -261,7 +261,7 @@
             this.checkLogFunc.TabIndex = 21;
             this.checkLogFunc.Text = "Log Function";
             this.checkLogFunc.UseVisualStyleBackColor = true;
-            this.checkLogFunc.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            this.checkLogFunc.CheckedChanged += new System.EventHandler(this.logCheckBox_Click);
             // 
             // Form1
             // 
