@@ -1673,7 +1673,7 @@ namespace SMTUploadTool
 
         private void btnReupload_Click(object sender, EventArgs e)
         {
-            long totalFileCount = 0;
+            int totalFileCount = 0;
             // get all the folders in monitor folder
             string[] folders = Directory.GetDirectories(toolSetting.monitorFolderPath);
             progressBar1.Maximum = folders.Length;
@@ -1845,6 +1845,7 @@ namespace SMTUploadTool
                                     // new file path
                                     newFilePath = newFolderPath + @"\" + newFileName;
                                     System.IO.File.Copy(file, newFilePath, true);
+                                    //totalFileCount++;
                                     plantExist = true;
                                     break;
                                 }
@@ -1855,7 +1856,7 @@ namespace SMTUploadTool
                                 //newFilePath = newFolderPath + @"\" + newFileName;
                                 newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                                 System.IO.File.Copy(file, newFilePath, true);
-                                totalFileCount++;
+                                //totalFileCount++;
                             }
 
 
@@ -1864,7 +1865,7 @@ namespace SMTUploadTool
                         {
                             newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                             System.IO.File.Copy(file, newFilePath, true);
-                            totalFileCount++;
+                           // totalFileCount++;
                         }
 
 
@@ -1944,8 +1945,11 @@ namespace SMTUploadTool
 
                     }
                 }
+                totalFileCount++;
             }
-            MessageBox.Show("Reupload " + totalFileCount + " files successfully!");
+            //this.Refresh();
+            
+            MessageBox.Show("Reupload " + totalFileCount.ToString() + " files successfully!");
             btnReupload.Enabled = true;
             btnReupload.IsAccessible = true;
             progressBar1.Visible = false;
