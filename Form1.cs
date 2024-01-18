@@ -410,96 +410,7 @@ namespace SMTUploadTool
                 sw.WriteLine("-------------------------------------------------------------------------------------------------------------------------");
             }
         }
-        /*
-        private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
-        {
-            ToolSetting toolSetting = new ToolSetting();
-            string binDataFilePath = "settings.bin";
-            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
-
-            if (e.ChangeType == WatcherChangeTypes.Created)
-            {
-                
-
-
-                // execute the function you want to trigger here
-                //Console.WriteLine($"New folder created: {e.FullPath}");
-                MessageBox.Show($"New folder created: {e.FullPath}");
-
-                //get folder name
-                string folderName = Path.GetFileName(e.FullPath);
-                //Console.WriteLine(folderName);
-
-                //get floder's all file
-                string[] files = Directory.GetFiles(e.FullPath);
-                //get file name
-                //string fileName = Path.GetFileName(files[0]);
-
-                //seach file, find and copy the insp_pad.txt and change file name then paste to specify folder
-                foreach (string file in files)
-                {
-                    //Console.WriteLine(file);
-                    if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        string fileName = Path.GetFileName(file);
-                        // cut the "." and words after the "." of fileName
-                        fileName = fileName.Substring(0, fileName.IndexOf("."));
-
-
-                        //Console.WriteLine(file);
-                        string newFileName = fileName + "_" + folderName + ".txt";
-                        string newFilePath = toolSetting.destinateFolderPath + @"\"  + newFileName;
-                        System.IO.File.Copy(file, newFilePath,true);
-                        Console.WriteLine($"New file created: {newFilePath}");
-                    }
-                }
-            }
-        }
-        
-        /*
-        private static async void OnFolderCreated(object sender, FileSystemEventArgs e)
-        {
-            ToolSetting toolSetting = new ToolSetting();
-            string binDataFilePath = "settings.bin";
-            toolSetting = ReadStructFromBinaryFile(binDataFilePath);
-
-            if (e.ChangeType == WatcherChangeTypes.Created)
-            {
-                // execute the function you want to trigger here
-                // Console.WriteLine($"New folder created: {e.FullPath}");
-                MessageBox.Show($"New folder created: {e.FullPath}");
-
-                // get folder name
-                string folderName = Path.GetFileName(e.FullPath);
-
-                // loop until the folder is created and contains the target file
-                while (!Directory.Exists(e.FullPath) || !Directory.GetFiles(e.FullPath).Any(file =>
-                    string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase)))
-                {
-                    await Task.Delay(1000); // every second check once, can be adjusted according to the actual situation
-                }
-
-                // get folder's all files
-                string[] files = Directory.GetFiles(e.FullPath);
-
-                // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
-                foreach (string file in files)
-                {
-                    if (string.Equals(Path.GetFileName(file), toolSetting.targetFileName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        string fileName = Path.GetFileName(file);
-                        // cut the "." and words after the "." of fileName
-                        fileName = fileName.Substring(0, fileName.IndexOf("."));
-
-                        string newFileName = fileName + "_" + folderName + ".txt";
-                        string newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
-                        System.IO.File.Copy(file, newFilePath, true);
-                        Console.WriteLine($"New file created: {newFilePath}");
-                }
-                    }
-            }
-        }
-        */
+       
         private static async void OnNewMonthlyCreated(object sender, FileSystemEventArgs e)
         {
             // get watcher from outside
@@ -563,6 +474,30 @@ namespace SMTUploadTool
                         // get folder's all files
                         //string[] files = Directory.GetFiles(e.FullPath);
 
+
+                        string monFolder;
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        //get the folder name like "20240131151056" get the first 6 digits "202401" store to monFolder and create a folder with the name "202401" in the destination folder
+                        if (Path.GetFileName(childNewMonitorFolders[0]).Length < 6)
+                        {
+                            monFolder="Unknown_Folder";
+                        }
+                        else
+                        {
+                            monFolder = Path.GetFileName(childNewMonitorFolders[0]).Substring(0, 6);
+                        }
+                        
+                        // check if the folder is exist in destination folder
+                        if (!Directory.Exists(toolSetting.destinateFolderPath + @"\" + monFolder))
+                        {
+                            // create the folder
+                            Directory.CreateDirectory(toolSetting.destinateFolderPath + @"\" + monFolder);
+                        }
+                        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
                         // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
                         foreach (string file in files)
                         {
@@ -611,8 +546,7 @@ namespace SMTUploadTool
                                 if (fileInfo1.Length != 0)
                                 {
 
-                                    //MessageBox.Show(fileInfo1.Length.ToString());
-                                    //model = FindAndExtract(file, "CTM|");
+                                    
                                     string keyword = "CTM|";
                                     try
                                     {
@@ -712,7 +646,7 @@ namespace SMTUploadTool
                                         {
                                             des = plant;
                                             //create new folder in destination folder
-                                            newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
+                                            newFolderPath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + plant;
                                             if (!Directory.Exists(newFolderPath))
                                             {
                                                 Directory.CreateDirectory(newFolderPath);
@@ -728,13 +662,13 @@ namespace SMTUploadTool
                                     {
                                         //newFolderPath = toolSetting.destinateFolderPath + @"\other";
                                         //newFilePath = newFolderPath + @"\" + newFileName;
-                                        newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                        newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                                         System.IO.File.Copy(file, newFilePath, true);
                                     }
                                 }
                                 else
                                 {
-                                    newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                    newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                                     System.IO.File.Copy(file, newFilePath, true);
                                 }
                                 //Console.WriteLine($"New file created: {newFilePath}");
@@ -776,11 +710,11 @@ namespace SMTUploadTool
                                 // check if the des is Empty
                                 if (des != string.Empty)
                                 {
-                                    des = @"/" + des;
+                                    des = @"\" + monFolder+@"\" + des;
                                 }
                                 else
                                 {
-                                    des = @"/";
+                                    des = @"\" + monFolder;
                                 }
                                 // create a txt file to record the log
                                 // create text file if not exist
@@ -821,17 +755,32 @@ namespace SMTUploadTool
                     // change the monitor folder path in the form
                     form1.Invoke((MethodInvoker)delegate {
                         // Running on the UI thread
-
+                        Boolean toggle = true;
                         form1.txtBoxMonitorFolder.Text = toolSetting.monitorFolderPath;
                         // open the UI on window screen/要打开代码才能点击按钮
-                        form1.ToggleMainWindow();
+                        // if the form is minimized, open the form
+                        if (form1.WindowState == FormWindowState.Minimized)
+                            toggle = true;
+                        else
+                            toggle = false;
+
+                        if (toggle)
+                        {
+                            form1.ToggleMainWindow();
+                        }
+                        
 
                         form1.WindowState = FormWindowState.Normal;
                         form1.btnStop.PerformClick();
                         form1.btnChangeSetting.PerformClick();
                         form1.btnApply.PerformClick();
                         //form1.btnStart.PerformClick();
-                        form1.ToggleMainWindow();
+                        if (toggle)
+                        {
+                            form1.ToggleMainWindow();
+                        }
+                            
+                        //form1.ToggleMainWindow();
                         //form1.Refresh();
                         //dispose the watcher1
                         
@@ -913,6 +862,27 @@ namespace SMTUploadTool
                         //break;
                     }
                 }
+                string monFolder;
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //get the folder name like "20240131151056" get the first 6 digits "202401" store to monFolder and create a folder with the name "202401" in the destination folder
+                if(Path.GetFileName(e.FullPath).Length < 6)
+                {
+                    monFolder = "Unknown_Folder";
+                }
+                else
+                {
+                    monFolder = Path.GetFileName(e.FullPath).Substring(0, 6);
+                }
+                //monFolder = Path.GetFileName(e.FullPath).Substring(0, 6);
+                // check if the folder is exist in destination folder
+                if (!Directory.Exists(toolSetting.destinateFolderPath + @"\" + monFolder))
+                {
+                    // create the folder
+                    Directory.CreateDirectory(toolSetting.destinateFolderPath + @"\" + monFolder);
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
                 // get folder's all files
                 string[] files = Directory.GetFiles(e.FullPath);
@@ -968,8 +938,7 @@ namespace SMTUploadTool
                         if (fileInfo1.Length != 0)
                         {
                             
-                            //MessageBox.Show(fileInfo1.Length.ToString());
-                            //model = FindAndExtract(file, "CTM|");
+                            
                             string keyword= "CTM|";
                             try
                             {
@@ -1069,7 +1038,7 @@ namespace SMTUploadTool
                                 {
                                     des = plant;
                                     //create new folder in destination folder
-                                    newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
+                                    newFolderPath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + plant;
                                     if (!Directory.Exists(newFolderPath))
                                     {
                                         Directory.CreateDirectory(newFolderPath);
@@ -1083,9 +1052,8 @@ namespace SMTUploadTool
                             }
                             if(plantExist == false)
                             {
-                                //newFolderPath = toolSetting.destinateFolderPath + @"\other";
-                                //newFilePath = newFolderPath + @"\" + newFileName;
-                                newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                
+                                newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                                 System.IO.File.Copy(file, newFilePath, true);
                             }
                             
@@ -1093,7 +1061,8 @@ namespace SMTUploadTool
                         }
                         else
                         {
-                            newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                            //if doesn't have the PlantList.txt, copy the file to the destination folder
+                            newFilePath = toolSetting.destinateFolderPath +@"\"+monFolder+ @"\" + newFileName;
                             System.IO.File.Copy(file, newFilePath, true);
                         }
 
@@ -1139,11 +1108,11 @@ namespace SMTUploadTool
                         // check if the des is Empty
                         if (des != string.Empty)
                         {
-                            des = @"/" + des;
+                            des = @"\" + monFolder+@"\" + des;
                         }
                         else
                         {
-                            des = " ";
+                            des = @"\" + monFolder;
                         }
 
 
@@ -1241,7 +1210,9 @@ namespace SMTUploadTool
             }
             else
             {
-
+                toolTip1.SetToolTip(this.btnReupload, "Reupload all the files " +
+                                                "\nform:" + toolSetting.monitorFolderPath +
+                                                "\nto     : " + toolSetting.destinateFolderPath);
 
                 if (!System.IO.File.Exists(toolSetting.LogFilePath))
                 {
@@ -1702,6 +1673,7 @@ namespace SMTUploadTool
 
         private void btnReupload_Click(object sender, EventArgs e)
         {
+            long totalFileCount = 0;
             // get all the folders in monitor folder
             string[] folders = Directory.GetDirectories(toolSetting.monitorFolderPath);
             progressBar1.Maximum = folders.Length;
@@ -1709,6 +1681,7 @@ namespace SMTUploadTool
             progressBar1.Minimum = 0;
             progressBar1.Visible = true;
             btnReupload.Enabled = false;
+            btnReupload.IsAccessible = false;
 
             // loop all the folders
             foreach (string folder in folders)
@@ -1727,6 +1700,25 @@ namespace SMTUploadTool
                 string[] files = Directory.GetFiles(folder);
                 //get path of the folder
                 string folderPath = Path.GetDirectoryName(folder);
+
+
+                string monFolder;
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //get the folder name like "20240131151056" get the first 6 digits "202401" store to monFolder and create a folder with the name "202401" in the destination folder
+                if (Path.GetFileName(folder).Length < 6)
+                    monFolder = "Unknown_Folder";
+                else
+                    monFolder = Path.GetFileName(folder).Substring(0, 6);
+                // check if the folder is exist in destination folder
+                if (!Directory.Exists(toolSetting.destinateFolderPath + @"\" + monFolder))
+                {
+                    // create the folder
+                    Directory.CreateDirectory(toolSetting.destinateFolderPath + @"\" + monFolder);
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
                 // search file, find and copy the insp_pad.txt and change file name then paste to specify folder
                 foreach (string file in files)
@@ -1845,7 +1837,7 @@ namespace SMTUploadTool
                                 {
                                     des = plant;
                                     //create new folder in destination folder
-                                    newFolderPath = toolSetting.destinateFolderPath + @"\" + plant;
+                                    newFolderPath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + plant;
                                     if (!Directory.Exists(newFolderPath))
                                     {
                                         Directory.CreateDirectory(newFolderPath);
@@ -1861,16 +1853,18 @@ namespace SMTUploadTool
                             {
                                 //newFolderPath = toolSetting.destinateFolderPath + @"\other";
                                 //newFilePath = newFolderPath + @"\" + newFileName;
-                                newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                                newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                                 System.IO.File.Copy(file, newFilePath, true);
+                                totalFileCount++;
                             }
 
 
                         }
                         else
                         {
-                            newFilePath = toolSetting.destinateFolderPath + @"\" + newFileName;
+                            newFilePath = toolSetting.destinateFolderPath + @"\" + monFolder + @"\" + newFileName;
                             System.IO.File.Copy(file, newFilePath, true);
+                            totalFileCount++;
                         }
 
 
@@ -1915,11 +1909,11 @@ namespace SMTUploadTool
                         // check if the des is Empty
                         if (des != string.Empty)
                         {
-                            des = @"/" + des;
+                            des = @"\" + monFolder+@"\" + des;
                         }
                         else
                         {
-                            des = " ";
+                            des = @"\" + monFolder;
                         }
 
 
@@ -1951,8 +1945,11 @@ namespace SMTUploadTool
                     }
                 }
             }
+            MessageBox.Show("Reupload " + totalFileCount + " files successfully!");
             btnReupload.Enabled = true;
+            btnReupload.IsAccessible = true;
             progressBar1.Visible = false;
+            
         }
     }
 }
